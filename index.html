@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M Square — Transform Healthcare Events Into Impact</title>
+  <meta name="description" content="M Square specializes in organizing high-quality conferences, CME accreditation, and medical internships for the healthcare and pharmaceutical industries.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+</head>
+<body>  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <img src="assets/M SQUARE_Icon with background.png" alt="M Square Logo" class="brand-logo">
+        <span class="brand-text">MSQUARE</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="#services">SERVICES</a></li>
+        <li><a href="#internships">INTERNSHIPS</a></li>
+        <li><a href="#values">VALUES</a></li>
+        <li><a href="#about">ABOUT</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="assets/Hero section.webp" alt="M Square Healthcare" class="hero-bg-img">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hw hw1">Transform</span>
+        <span class="hw hw2">Healthcare Events</span>
+        <span class="hw hw3">Into Impact</span>
+      </h1>
+      <p class="hero-sub">Expert-driven conferences, seamless CME accreditation, and cutting-edge event solutions for the pharmaceutical and medical industries.</p>
+    </div>
+    <div class="hero-scroll"><p>Scroll to explore</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </section>
+
+  <!-- ═══ ABOUT & VALUES (Split Layout) ═══ -->
+  <section class="identity" id="about">
+    <div class="container">
+      <div class="identity-grid">
+        <!-- Left: Vision & Mission -->
+        <div class="identity-left" data-anim>
+          <div class="id-box">
+            <span class="id-label">OUR VISION</span>
+            <p class="id-text">To be the leading platform for knowledge exchange, setting the highest standards in medical event planning and fostering a global community.</p>
+          </div>
+          <div class="id-divider"></div>
+          <div class="id-box">
+            <span class="id-label">OUR MISSION</span>
+            <p class="id-text">Committed to delivering flawless execution, innovative formats, and impactful content bridging academic theory and clinical practice.</p>
+          </div>
+        </div>
+
+        <!-- Right: Core Values -->
+        <div class="identity-right" id="values" data-anim>
+          <div class="value-item">
+            <span class="val-num">01</span>
+            <div class="val-body">
+              <h3>Excellence</h3>
+              <p>Top-quality, detail-driven events.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="val-num">02</span>
+            <div class="val-body">
+              <h3>Integrity</h3>
+              <p>Honesty and full transparency.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="val-num">03</span>
+            <div class="val-body">
+              <h3>Innovation</h3>
+              <p>Fresh ideas and smart tech.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="val-num">04</span>
+            <div class="val-body">
+              <h3>Collaboration</h3>
+              <p>Stronger through partnerships and teamwork.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="val-num">05</span>
+            <div class="val-body">
+              <h3>Impact</h3>
+              <p>Making a real difference in every industry.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SERVICES (Centered Dark Overlay + Glassmorphic Badges) ═══ -->
+  <section class="services-v2" id="services">
+    <div class="sv2-bg">
+      <img src="assets/Comprehensive.Services.webp" alt="" class="sv2-bg-img">
+      <div class="sv2-overlay"></div>
+    </div>
+    <div class="container sv2-inner">
+      <h2 class="sv2-title" data-anim>
+        <span class="sv2-sans">Comprehensive</span><br>
+        <span class="sv2-serif">Services</span>
+      </h2>
+      <p class="sv2-sub" data-anim>End-to-end event management solutions engineered specifically for the rigorous demands of the healthcare and pharmaceutical sectors.</p>
+      <div class="sv2-grid">
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">📋</span>
+          <span class="sv2-name">Conference Planning</span>
+          <p class="sv2-detail">Professional, seamless events from A to Z.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">🏅</span>
+          <span class="sv2-name">CME Accreditation</span>
+          <p class="sv2-detail">Officially accredited continuing medical education events.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">🎤</span>
+          <span class="sv2-name">Speaker Coordination</span>
+          <p class="sv2-detail">Connecting with top local and international experts.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">📝</span>
+          <span class="sv2-name">Registration Mgmt</span>
+          <p class="sv2-detail">Smooth guest experience from invites to check-in.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">🎨</span>
+          <span class="sv2-name">Event Branding</span>
+          <p class="sv2-detail">Visual identity, print materials, and on-site displays.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">🤝</span>
+          <span class="sv2-name">Sponsorship Handling</span>
+          <p class="sv2-detail">Managing sponsor relations and exhibition booths.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">💻</span>
+          <span class="sv2-name">Virtual & Hybrid Events</span>
+          <p class="sv2-detail">Online and hybrid events with full technical support.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">📱</span>
+          <span class="sv2-name">Digital Marketing</span>
+          <p class="sv2-detail">Targeted campaigns and social media management.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">📊</span>
+          <span class="sv2-name">Post-Event Reporting</span>
+          <p class="sv2-detail">Insights and analytics to measure event impact.</p>
+        </div>
+        <div class="sv2-badge" data-anim>
+          <span class="sv2-icon">⚙️</span>
+          <span class="sv2-name">IT Solutions</span>
+          <p class="sv2-detail">Custom event apps and networking platforms.</p>
+        </div>
+      </div>
+    </div>
+    <div class="sv2-accent-bar"></div>
+  </section>
+
+  <!-- ═══ INTERNSHIPS (Organic Shape Style) ═══ -->
+  <section class="internships-new" id="internships">
+    <div class="container in-container">
+      <div class="in-left" data-anim>
+        <div class="in-organic-wrap">
+          <div class="in-organic-shape">
+            <img src="assets/images/service-4.jpg" alt="Laboratory Equipment" onerror="this.src='https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=800&auto=format&fit=crop'">
+            <div class="in-overlay"></div>
+          </div>
+          <div class="in-glass-card in-glass-top" data-anim>
+            <span class="ig-label">Programs</span>
+            <span class="ig-val">12+</span>
+          </div>
+          <div class="in-glass-card in-glass-bottom" data-anim>
+            <span class="ig-label">Integration</span>
+            <span class="ig-val">Theory & Practice</span>
+          </div>
+        </div>
+      </div>
+      <div class="in-right" data-anim>
+        <div class="in-label">
+          <span class="in-line"></span>
+          <span>STUDENT PROGRAMS</span>
+        </div>
+        <h2 class="in-title">
+          <span class="in-sans">Medical</span><br>
+          <span class="in-serif">Internships</span>
+        </h2>
+        <p class="in-desc">Accelerate your career with hands-on experience across specialized disciplines. Our programs bridge the gap between academic theory and clinical reality in state-of-the-art facilities.</p>
+        
+        <div class="in-grid">
+          <span>Clinical Pharmacy</span>
+          <span>Industrial Pharmacy</span>
+          <span>Medical Research</span>
+          <span>Laboratory Science</span>
+          <span>Sales & Marketing</span>
+          <span>Regulatory Affairs</span>
+          <span>Quality Assurance</span>
+          <span>Pharmacovigilance</span>
+          <span>Health Economics</span>
+          <span>Medical Training</span>
+          <span>Pharmaceutical Chemistry</span>
+          <span>Statistical Analysis</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EVENTS ═══ -->
+  <section class="events" id="events">
+    <div class="container">
+      <h2 class="ev-main-title" data-anim>Our Past Events</h2>
+      <p class="ev-main-sub" data-anim>Successful conferences and events we've organized</p>
+
+      <!-- PULMO — Asymmetric Mosaic -->
+      <article class="ev-block" data-anim>
+        <div class="ev-info"><span class="ev-date">18 April 2025</span><h3 class="ev-name">Pulmo PortSaid Conference</h3><p class="ev-desc">A premier pulmonology conference bringing together leading respiratory specialists for knowledge exchange and clinical updates.</p></div>
+        <div class="ev-mosaic ev-mosaic-diagonal">
+          <div class="mo mo-big"><img src="assets/pulmo event/Pulmo event-10.webp" alt="Pulmo" loading="lazy"></div>
+          <div class="mo mo-tr"><img src="assets/pulmo event/Pulmo event-23.webp" alt="Pulmo" loading="lazy"></div>
+          <div class="mo mo-mr"><img src="assets/pulmo event/Pulmo event-46.webp" alt="Pulmo" loading="lazy"></div>
+          <div class="mo mo-bl"><img src="assets/pulmo event/Pulmo event-48.webp" alt="Pulmo" loading="lazy"></div>
+          <div class="mo mo-br"><img src="assets/pulmo event/Pulmo event-52.webp" alt="Pulmo" loading="lazy"></div>
+        </div>
+      </article>
+
+      <!-- ENGAZ — Polaroid Scatter -->
+      <article class="ev-block" data-anim>
+        <div class="ev-info"><span class="ev-date">26–27 Dec 2025</span><h3 class="ev-name">ENGAZ PortSaid Celebrations</h3><p class="ev-desc">A grand celebration event marking achievements and milestones with interactive sessions and networking.</p></div>
+        <div class="ev-mosaic ev-clean-grid">
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3-253.webp" alt="Engaz" loading="lazy"></div>
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3.1-12.webp" alt="Engaz" loading="lazy"></div>
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3.1-27.webp" alt="Engaz" loading="lazy"></div>
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3.1-53.webp" alt="Engaz" loading="lazy"></div>
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3.1-6.webp" alt="Engaz" loading="lazy"></div>
+          <div class="eg-item"><img src="assets/engaz event/Engaz Events 3.1-8.webp" alt="Engaz" loading="lazy"></div>
+        </div>
+      </article>
+
+      <!-- PHARMACY — Cinematic Filmstrip -->
+      <article class="ev-block" data-anim>
+        <div class="ev-info"><span class="ev-date">11 April 2025</span><h3 class="ev-name">Pharmacy Career Spot</h3><p class="ev-desc">Connecting pharmacy students with top pharmaceutical companies and industry professionals for career development.</p></div>
+        <div class="ev-mosaic ev-cinema">
+          <div class="cin-track">
+            <div class="cin-frame"><img src="assets/Pharmacy Career Spot/Pharmacy Career Spot-16.webp" alt="Career Spot" loading="lazy"><div class="cin-label">Career Spot 2025</div></div>
+            <div class="cin-frame"><img src="assets/Pharmacy Career Spot/Pharmacy Career Spot-127.webp" alt="Career Spot" loading="lazy"><div class="cin-label">Industry Connect</div></div>
+            <div class="cin-frame"><img src="assets/Pharmacy Career Spot/Pharmacy Career Spot-139.webp" alt="Career Spot" loading="lazy"><div class="cin-label">Pharmacy Futures</div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ PARTNERS ═══ -->
+  <section class="partners" id="partners">
+    <div class="container">
+      <h2 class="ptr-title" data-anim>Our Partners</h2>
+      <div class="ptr-ticker" data-anim>
+        <div class="ticker-track">
+          <span class="ti">Pharmaceutical Industry Leaders</span><span class="td"></span>
+          <span class="ti">Medical Institutions</span><span class="td"></span>
+          <span class="ti">Healthcare Organizations</span><span class="td"></span>
+          <span class="ti">Academic Universities</span><span class="td"></span>
+          <span class="ti">Research Centers</span><span class="td"></span>
+          <span class="ti">Government Health Bodies</span><span class="td"></span>
+          <span class="ti">Pharmaceutical Industry Leaders</span><span class="td"></span>
+          <span class="ti">Medical Institutions</span><span class="td"></span>
+          <span class="ti">Healthcare Organizations</span><span class="td"></span>
+          <span class="ti">Academic Universities</span><span class="td"></span>
+          <span class="ti">Research Centers</span><span class="td"></span>
+          <span class="ti">Government Health Bodies</span><span class="td"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT (Split) ═══ -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="ct-grid" data-anim>
+        <div class="ct-left">
+          <h2>Connect<br>With Us</h2>
+          <p class="ct-intro">Our team is ready to assist you with inquiries regarding event partnerships, accreditation, or internship opportunities.</p>
+          <div class="ct-items">
+            <div class="ct-item"><div class="ct-icon">📍</div><div><p class="ct-label">Headquarters</p><p class="ct-val">Cairo — AlQattamia District, 36 AlMarwa Land</p></div></div>
+            <div class="ct-item"><div class="ct-icon">✉️</div><div><p class="ct-label">General Inquiries</p><p class="ct-val"><a href="mailto:admin@mtechsquare.com">admin@mtechsquare.com</a></p></div></div>
+            <div class="ct-item"><div class="ct-icon">📞</div><div><p class="ct-label">Direct Lines</p><p class="ct-val"><a href="tel:+201002906884">+20 100 290 6884</a><br><a href="tel:+201064731374">+20 106 473 1374</a></p></div></div>
+          </div>
+        </div>
+        <div class="ct-right">
+          <div class="ct-visual">
+            <div class="ct-shape ct-s1"></div>
+            <div class="ct-shape ct-s2"></div>
+            <div class="ct-shape ct-s3"></div>
+            <img src="assets/M SQUARE_Icon with background.png" alt="M Square" class="ct-logo-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-col ft-main">
+          <div class="ft-logo">M²</div>
+          <p class="ft-tag">Transforming Healthcare Events Into Impact</p>
+          <p class="ft-info"><strong>Email:</strong> <a href="mailto:admin@mtechsquare.com">admin@mtechsquare.com</a></p>
+          <p class="ft-info"><strong>Phone:</strong> <a href="tel:+201002906884">01002906884</a> | <a href="tel:+201064731374">01064731374</a></p>
+        </div>
+        <div class="ft-col"><h4>Services</h4><ul><li><a href="#services">Conference Planning</a></li><li><a href="#services">CME Accreditation</a></li><li><a href="#services">Virtual Events</a></li><li><a href="#services">Media Production</a></li></ul></div>
+        <div class="ft-col"><h4>Internships</h4><ul><li><a href="#internships">Clinical Pharmacy</a></li><li><a href="#internships">Drug Safety</a></li><li><a href="#internships">Medical Research</a></li><li><a href="#internships">Quality Control</a></li></ul></div>
+      </div>
+      <div class="ft-bottom"><p>&copy; 2025 M Square. All rights reserved. Part of MTech Square Group.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="animations.js"></script>
+</body>
+</html>
