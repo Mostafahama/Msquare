@@ -14,12 +14,6 @@ import { gsap } from 'gsap';
   standalone: true,
   imports: [CommonModule, HeaderComponent, HeroComponent, IdentityComponent, WipePanelsComponent, EventsComponent, PartnersComponent, FooterComponent],
   template: `
-    <!-- ═══ CUSTOM CURSOR ═══ -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline">
-      <span class="cursor-text"></span>
-    </div>
-
     <!-- ═══ APP LAYOUT ═══ -->
     <app-header></app-header>
     <main>
@@ -40,51 +34,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.ctx = gsap.context(() => {
       document.body.classList.add('gsap-ready');
 
-      const cursorDot = document.querySelector('.cursor-dot') as HTMLElement;
-      const cursorOutline = document.querySelector('.cursor-outline') as HTMLElement;
-      const cursorText = document.querySelector('.cursor-text') as HTMLElement;
-
-      if (cursorDot && cursorOutline && window.innerWidth > 1024) {
-        gsap.set([cursorDot, cursorOutline], { xPercent: -50, yPercent: -50 });
-        
-        const xToDot = gsap.quickTo(cursorDot, "x", {duration: 0.1, ease: "power3"});
-        const yToDot = gsap.quickTo(cursorDot, "y", {duration: 0.1, ease: "power3"});
-        
-        const xToOutline = gsap.quickTo(cursorOutline, "x", {duration: 0.3, ease: "power3"});
-        const yToOutline = gsap.quickTo(cursorOutline, "y", {duration: 0.3, ease: "power3"});
-
-        window.addEventListener("mousemove", (e: MouseEvent) => {
-          xToDot(e.clientX);
-          yToDot(e.clientY);
-          xToOutline(e.clientX);
-          yToOutline(e.clientY);
-        });
-
-        // Event delegation for hover states
-        document.body.addEventListener('mouseover', (e: MouseEvent) => {
-          const target = e.target as HTMLElement;
-          
-          if (target.closest('a, button, .sv2-badge')) {
-            cursorOutline.classList.add('hover-link');
-          }
-          if (target.closest('.ev-dynamic-gallery, .in-organic-shape, .placeholder-image')) {
-            cursorOutline.classList.add('hover-image');
-            if (cursorText) cursorText.textContent = "VIEW";
-          }
-        });
-
-        document.body.addEventListener('mouseout', (e: MouseEvent) => {
-          const target = e.target as HTMLElement;
-          
-          if (target.closest('a, button, .sv2-badge')) {
-            cursorOutline.classList.remove('hover-link');
-          }
-          if (target.closest('.ev-dynamic-gallery, .in-organic-shape, .placeholder-image')) {
-            cursorOutline.classList.remove('hover-image');
-            if (cursorText) cursorText.textContent = "";
-          }
-        });
-      }
+      // No more custom cursor logic
     });
   }
 

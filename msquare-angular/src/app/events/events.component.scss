@@ -67,8 +67,6 @@
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  content-visibility: auto; /* Massive performance boost */
-  contain-intrinsic-size: 82vw 600px;
 }
 
 @media (max-width: 768px) {
