@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, ViewChildren, ElementRef, QueryList, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,50 +13,30 @@ gsap.registerPlugin(ScrollTrigger);
   styleUrls: ['./wipe-panels.component.scss']
 })
 export class WipePanelsComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('container') container!: ElementRef<HTMLElement>;
-  @ViewChildren('panel') panels!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('section') sections!: QueryList<ElementRef<HTMLElement>>;
 
   private ctx!: gsap.Context;
+
   ngAfterViewInit() {
     this.ctx = gsap.context(() => {
-      const panelElements = this.panels.toArray().map(p => p.nativeElement);
+      // Simple, natural scroll-triggered entrance animations — no pinning, no hijacking.
+      this.sections.toArray().forEach((sec) => {
+        const el = sec.nativeElement;
 
-      // Initially set all panels (except the first) to be pushed down exactly 100%
-      gsap.set(panelElements.slice(1), { yPercent: 100 });
-
-      // Create the main timeline for the wipe effect
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: this.container.nativeElement,
-          start: "top top",
-          end: () => `+=${panelElements.length * 100}%`,
-          pin: true,
-          scrub: 1,
-        }
-      });
-
-      // Build the stacking sequences
-      panelElements.forEach((panel, i) => {
-        if (i === 0) return;
-
-        const prevPanel = panelElements[i - 1];
-
-        // Scale down, fade, and blur the PREVIOUS panel
-        tl.to(prevPanel, {
-          scale: 0.85,
-          opacity: 0.3,
-          filter: "blur(5px)",
-          ease: "none"
+        // Fade + slide up on scroll into view
+        gsap.from(el, {
+          y: 60,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
         });
-
-        // Slide the NEW panel up simultaneously
-        tl.to(panel, {
-          yPercent: 0,
-          ease: "none"
-        }, "<");
       });
-
-    }, this.container.nativeElement);
+    });
   }
 
   ngOnDestroy() {
