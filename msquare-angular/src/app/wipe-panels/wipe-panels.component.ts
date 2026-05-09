@@ -86,6 +86,20 @@ export class WipePanelsComponent implements AfterViewInit, OnDestroy {
         });
       }
 
+      /* ─── INTERNSHIPS: grid spans stagger in ─── */
+      gsap.from('.in-grid span', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.05,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.in-grid',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
+
     });
   }
 

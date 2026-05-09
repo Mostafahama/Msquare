@@ -19,7 +19,7 @@
   display: flex; align-items: center; gap: 12px; padding: 16px 28px;
   background: rgba(26,26,64,.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,.12); border-radius: 40px; color: #fff;
-  cursor: pointer; transition: all .35s var(--ease); position: relative; overflow: hidden; will-change: transform;
+  cursor: pointer; transition: background-color .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease); position: relative; overflow: hidden; will-change: transform;
 }
 .sv2-badge:hover { background: rgba(184,134,11,.2); border-color: var(--gold-light); box-shadow: 0 12px 32px rgba(184,134,11,.2); }
 .sv2-icon { font-size: 18px; flex-shrink: 0; }
