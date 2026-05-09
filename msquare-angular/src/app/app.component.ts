@@ -67,7 +67,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           if (target.closest('a, button, .sv2-badge')) {
             cursorOutline.classList.add('hover-link');
           }
-          if (target.closest('.ev-mosaic, .in-organic-shape, .placeholder-image')) {
+          if (target.closest('.ev-dynamic-gallery, .in-organic-shape, .placeholder-image')) {
             cursorOutline.classList.add('hover-image');
             if (cursorText) cursorText.textContent = "VIEW";
           }
@@ -79,7 +79,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           if (target.closest('a, button, .sv2-badge')) {
             cursorOutline.classList.remove('hover-link');
           }
-          if (target.closest('.ev-mosaic, .in-organic-shape, .placeholder-image')) {
+          if (target.closest('.ev-dynamic-gallery, .in-organic-shape, .placeholder-image')) {
             cursorOutline.classList.remove('hover-image');
             if (cursorText) cursorText.textContent = "";
           }
