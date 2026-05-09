@@ -1,0 +1,37 @@
+/* ── CONTACT (Split) ── */
+.contact{padding:110px 0;background:var(--white)}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:900px){.ct-grid{grid-template-columns:1fr}}
+.ct-left h2{font-size:clamp(2.2rem,5vw,3rem);color:var(--navy);margin-bottom:16px;line-height:1.2}
+.ct-intro{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:32px}
+.ct-items{display:flex;flex-direction:column;gap:24px}
+.ct-item{display:flex;gap:16px;align-items:flex-start}
+.ct-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.ct-label{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin:0 0 4px}
+.ct-val{font-size:16px;color:var(--navy);font-weight:600;margin:0;line-height:1.5}
+.ct-val a{color:var(--navy)}
+.ct-val a:hover{color:var(--gold)}
+.ct-right{display:flex;align-items:center;justify-content:center}
+.ct-visual{position:relative;width:100%;aspect-ratio:1;max-width:420px;background:linear-gradient(135deg,var(--navy),#1a1a50);border-radius:20px;display:grid;place-items:center;overflow:hidden}
+.ct-shape{position:absolute;border-radius:50%;opacity:.08}
+.ct-s1{width:300px;height:300px;background:var(--gold);top:-60px;right:-60px}
+.ct-s2{width:200px;height:200px;background:var(--blue);bottom:-40px;left:-40px}
+.ct-s3{width:140px;height:140px;background:#fff;bottom:30%;right:20%}
+.ct-logo-img{width:60%;max-width:220px;z-index:1;filter:drop-shadow(0 10px 30px rgba(0,0,0,.3))}
+@media(max-width:900px){.ct-right{display:none}}
+
+/* ── FOOTER ── */
+.footer{background:var(--navy);color:#fff;padding:56px 0 0}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px}
+@media(max-width:768px){.ft-grid{grid-template-columns:1fr;gap:24px}}
+.ft-logo{font-family:var(--fd);font-size:36px;font-weight:800;color:var(--gold);margin-bottom:8px}
+.ft-tag{color:rgba(255,255,255,.5);font-size:14px;margin-bottom:16px}
+.ft-info{color:rgba(255,255,255,.6);font-size:13px;margin:4px 0}
+.ft-info a{color:rgba(255,255,255,.6)}.ft-info a:hover{color:var(--gold)}
+.ft-col h4{font-family:var(--fd);color:var(--gold);font-size:16px;margin-bottom:16px}
+.ft-col ul{list-style:none}
+.ft-col li{margin-bottom:8px}
+.ft-col li a{color:rgba(255,255,255,.5);font-size:13px}
+.ft-col li a:hover{color:var(--gold)}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.06);padding:16px 0;text-align:center}
+.ft-bottom p{color:rgba(255,255,255,.3);font-size:12px}

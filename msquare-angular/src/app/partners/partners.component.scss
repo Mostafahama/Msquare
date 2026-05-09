@@ -1,0 +1,52 @@
+/* ── PARTNERS ── */
+.partners {
+  padding: 90px 0;
+  min-height: 50vh;
+}
+
+.ptr-title {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  text-align: center;
+  color: var(--navy);
+  margin-bottom: 36px;
+}
+
+.ptr-ticker {
+  overflow: hidden;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  animation: tick 20s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.ti {
+  font-family: var(--fd);
+  font-size: clamp(16px, 2.8vw, 28px);
+  font-weight: 700;
+  color: rgba(26, 26, 64, .1);
+  transition: color .3s;
+  padding: 8px 0;
+}
+
+.ti:hover {
+  color: var(--navy);
+}
+
+.td {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: .3;
+  flex-shrink: 0;
+}
+
+@keyframes tick {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

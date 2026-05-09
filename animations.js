@@ -30,28 +30,88 @@
       document.body.classList.add('gsap-ready');
 
       /* ─────────────────────────────────────
-         1. HERO TEXT — Smooth, slow fade-in
+         0. CUSTOM CURSOR
          ───────────────────────────────────── */
-      const hw1 = document.querySelector('.hw1');
-      const hw2 = document.querySelector('.hw2');
-      const hw3 = document.querySelector('.hw3');
-      const heroSub = document.querySelector('.hero-sub');
+      const cursorDot = document.querySelector('.cursor-dot');
+      const cursorOutline = document.querySelector('.cursor-outline');
+      const cursorText = document.querySelector('.cursor-text');
 
-      if (hw1 && hw2 && hw3) {
-        gsap.set([hw1, hw2, hw3], { opacity: 0, y: 30 });
+      if (cursorDot && cursorOutline && window.innerWidth > 1024) {
+        gsap.set([cursorDot, cursorOutline], { xPercent: -50, yPercent: -50 });
+        
+        let xToDot = gsap.quickTo(cursorDot, "x", {duration: 0.1, ease: "power3"});
+        let yToDot = gsap.quickTo(cursorDot, "y", {duration: 0.1, ease: "power3"});
+        
+        let xToOutline = gsap.quickTo(cursorOutline, "x", {duration: 0.3, ease: "power3"});
+        let yToOutline = gsap.quickTo(cursorOutline, "y", {duration: 0.3, ease: "power3"});
+
+        window.addEventListener("mousemove", e => {
+          xToDot(e.clientX);
+          yToDot(e.clientY);
+          xToOutline(e.clientX);
+          yToOutline(e.clientY);
+        });
+
+        // Hover states
+        const links = document.querySelectorAll('a, button, .sv2-badge');
+        links.forEach(el => {
+          el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover-link'));
+          el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover-link'));
+        });
+
+        const images = document.querySelectorAll('.ev-mosaic, .in-organic-shape, .placeholder-image');
+        images.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            cursorOutline.classList.add('hover-image');
+            if (cursorText) cursorText.textContent = "VIEW";
+          });
+          el.addEventListener('mouseleave', () => {
+            cursorOutline.classList.remove('hover-image');
+          });
+        });
+      }
+
+      /* ─────────────────────────────────────
+         1. HERO TEXT & BG — Cinematic Reveal
+         ───────────────────────────────────── */
+      const hwInners = gsap.utils.toArray('.hw-inner');
+      const heroSub = document.querySelector('.hero-sub');
+      const heroBgImg = document.querySelector('.hero-bg-img');
+
+      if (hwInners.length) {
+        gsap.set(hwInners, { yPercent: 120, rotation: 2 });
         if (heroSub) gsap.set(heroSub, { opacity: 0, y: 20 });
 
-        const heroTL = gsap.timeline({ defaults: { ease: 'power2.out' } });
-        heroTL
-          .to(hw1, { opacity: 1, y: 0, duration: 1.4 }, 0.3)
-          .to(hw2, { opacity: 1, y: 0, duration: 1.4 }, 0.7)
-          .to(hw3, { opacity: 1, y: 0, duration: 1.4 }, 1.1)
-          .to(heroSub, { opacity: 0.9, y: 0, duration: 1.2 }, 1.4);
+        const heroTL = gsap.timeline({ defaults: { ease: 'power4.out' } });
+        
+        // Background slow zoom out
+        if (heroBgImg) {
+          heroTL.to(heroBgImg, { scale: 1, duration: 4, ease: 'power2.out' }, 0);
+        }
+
+        // Text reveal
+        heroTL.to(hwInners, { yPercent: 0, rotation: 0, duration: 1.2, stagger: 0.15 }, 0.2)
+              .to(heroSub, { opacity: 0.9, y: 0, duration: 1.2, ease: 'power2.out' }, 0.8);
       }
 
       /* ─────────────────────────────────────
          2. SCROLL-TRIGGERED ANIMATIONS
          ───────────────────────────────────── */
+      
+      // Global Section Reveal
+      gsap.utils.toArray('section:not(#hero)').forEach(sec => {
+        gsap.from(sec, {
+          y: 60,
+          opacity: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sec,
+            start: 'top 85%'
+          }
+        });
+      });
+
       function animateFrom(selector, config) {
         const el = document.querySelector(selector);
         if (!el) return;
@@ -98,8 +158,49 @@
       // Events
       animateFrom('.ev-main-title', { y: 40 });
       animateFrom('.ev-main-sub', { y: 25 });
-      animateEach('.ev-block', { y: 50, duration: 0.9 });
       animateEach('.mo, .eg-item, .cin-frame', { scale: 0.92, duration: 0.6 });
+
+      // Events Horizontal Scroll
+      const eventsContainer = document.querySelector('.events-scroll-container');
+      if (eventsContainer) {
+        const getScrollAmount = () => eventsContainer.scrollWidth - window.innerWidth + (window.innerWidth * 0.1);
+        
+        const eventsScrollTween = gsap.to(eventsContainer, {
+          x: () => -getScrollAmount(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.events',
+            pin: true,
+            start: 'bottom bottom',
+            end: () => `+=${getScrollAmount()}`,
+            scrub: 1,
+            invalidateOnRefresh: true
+          }
+        });
+
+        // Add 3D parallax to event mosaics and info within the horizontal scroll
+        gsap.utils.toArray('.ev-block').forEach((block) => {
+          const mosaic = block.querySelector('.ev-mosaic');
+          const info = block.querySelector('.ev-info');
+
+          if (mosaic) {
+            gsap.from(mosaic, {
+              x: 100, opacity: 0, rotationY: -15, transformPerspective: 1000,
+              scrollTrigger: {
+                trigger: block, containerAnimation: eventsScrollTween, start: 'left 80%', end: 'center center', scrub: 1
+              }
+            });
+          }
+          if (info) {
+            gsap.from(info, {
+              x: 50, opacity: 0,
+              scrollTrigger: {
+                trigger: block, containerAnimation: eventsScrollTween, start: 'left 85%', end: 'center center', scrub: 1
+              }
+            });
+          }
+        });
+      }
 
       // Partners
       animateFrom('.ptr-title', { y: 30 });

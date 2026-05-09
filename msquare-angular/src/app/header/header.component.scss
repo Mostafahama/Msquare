@@ -1,0 +1,17 @@
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:10px 0;background:transparent;transition:all .3s var(--ease)}
+.navbar.scrolled{background:var(--glass);border-bottom:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.04);padding:6px 0}
+.nav-inner{max-width:1320px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;z-index:10}
+.brand-logo{height:40px;width:40px;object-fit:contain;border-radius:6px}
+.brand-text{font-family:var(--fd);font-weight:800;font-size:18px;color:var(--navy);letter-spacing:1.5px}
+.nav-links{list-style:none;display:flex;gap:32px;align-items:center;margin-left:auto}
+.nav-links a{font-size:12px;font-weight:600;letter-spacing:1.2px;color:var(--text);text-transform:uppercase;position:relative}
+.nav-links a:hover{color:var(--gold)}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;z-index:10;padding:4px}
+.nav-toggle span{width:22px;height:2px;background:var(--navy);border-radius:2px;transition:all .3s var(--ease)}
+@media(max-width:1024px){
+  .nav-links{display:none;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--white);padding:28px;gap:16px;border-bottom:1px solid var(--border);margin:0}
+  .nav-links.active{display:flex}
+  .nav-toggle{display:flex}
+}
