@@ -5,89 +5,101 @@
     <!-- Vision & Mission — side-by-side cards -->
     <div class="vm-header" #leftCol>
       <p class="eyebrow">Who We Are</p>
-      <h2 class="vm-heading">Built on clarity.<br>Driven by purpose.</h2>
+      <h2 class="vm-heading" #vmHeading>Built on clarity.<br>Driven by <span class="gold-text">purpose.</span></h2>
     </div>
 
-    <div class="vm-cards">
-      <div class="vm-card accent-card">
-        <div class="vm-card-icon" aria-hidden="true">
-          <!-- Eye / Vision icon (Lucide outline) -->
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </div>
-        <span class="vm-label">OUR VISION</span>
-        <p class="vm-text">To be the leading platform for knowledge exchange, setting the highest standards in medical event planning and fostering a global community of healthcare professionals.</p>
+    <div class="vm-cards-wrap">
+      <div class="vm-connector" aria-hidden="true">
+        <div class="vm-connector-line" #vmLine></div>
       </div>
-
-      <div class="vm-card accent-card">
-        <div class="vm-card-icon" aria-hidden="true">
-          <!-- Target / Mission icon (Lucide outline) -->
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <circle cx="12" cy="12" r="6"/>
-            <circle cx="12" cy="12" r="2"/>
-          </svg>
+      <div class="vm-cards">
+        <div class="vm-card accent-card">
+          <div class="vm-card-icon" aria-hidden="true">
+            <!-- Eye / Vision icon (Lucide outline) -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span class="vm-label">OUR VISION</span>
+          <p class="vm-text">To be the leading platform for knowledge exchange, setting the highest standards in medical event planning and fostering a global community of healthcare professionals.</p>
         </div>
-        <span class="vm-label">OUR MISSION</span>
-        <p class="vm-text">Committed to delivering flawless execution, innovative formats, and impactful content that bridges academic theory and clinical practice across Egypt's healthcare sector.</p>
+
+        <div class="vm-card accent-card">
+          <div class="vm-card-icon" aria-hidden="true">
+            <!-- Target / Mission icon (Lucide outline) -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
+          <span class="vm-label">OUR MISSION</span>
+          <p class="vm-text">Committed to delivering flawless execution, innovative formats, and impactful content that bridges academic theory and clinical practice across Egypt's healthcare sector.</p>
+        </div>
       </div>
     </div>
 
     <!-- Core Values — 2×3 grid on desktop -->
     <div class="values-wrap" id="values">
       <p class="eyebrow">Core Values</p>
-      <div class="values-grid">
-
-        <div class="value-item" #valueItem>
-          <span class="val-num">01</span>
-          <div class="val-body">
-            <h3>Excellence</h3>
-            <p>Top-quality, detail-driven events that exceed expectations every time.</p>
-          </div>
+      
+      <div class="values-grid-wrap">
+        <div class="values-spine-track" aria-hidden="true">
+          <div class="values-spine-fill" #valuesSpineFill></div>
         </div>
 
-        <div class="value-item" #valueItem>
-          <span class="val-num">02</span>
-          <div class="val-body">
-            <h3>Integrity</h3>
-            <p>Honesty and full transparency in every relationship and decision.</p>
-          </div>
-        </div>
+        <div class="values-grid">
 
-        <div class="value-item" #valueItem>
-          <span class="val-num">03</span>
-          <div class="val-body">
-            <h3>Innovation</h3>
-            <p>Fresh ideas and smart technology applied to healthcare event design.</p>
+          <div class="value-item" #valueItem>
+            <span class="val-num">01</span>
+            <div class="val-body">
+              <h3>Excellence</h3>
+              <p>Top-quality, detail-driven events that exceed expectations every time.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="value-item" #valueItem>
-          <span class="val-num">04</span>
-          <div class="val-body">
-            <h3>Collaboration</h3>
-            <p>Stronger outcomes through meaningful partnerships and real teamwork.</p>
+          <div class="value-item" #valueItem>
+            <span class="val-num">02</span>
+            <div class="val-body">
+              <h3>Integrity</h3>
+              <p>Honesty and full transparency in every relationship and decision.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="value-item" #valueItem>
-          <span class="val-num">05</span>
-          <div class="val-body">
-            <h3>Impact</h3>
-            <p>Making a measurable difference in the healthcare and pharma industries.</p>
+          <div class="value-item" #valueItem>
+            <span class="val-num">03</span>
+            <div class="val-body">
+              <h3>Innovation</h3>
+              <p>Fresh ideas and smart technology applied to healthcare event design.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="value-item" #valueItem>
-          <span class="val-num">06</span>
-          <div class="val-body">
-            <h3>Lifelong Learning</h3>
-            <p>We support continuous growth and knowledge sharing at every career stage.</p>
+          <div class="value-item" #valueItem>
+            <span class="val-num">04</span>
+            <div class="val-body">
+              <h3>Collaboration</h3>
+              <p>Stronger outcomes through meaningful partnerships and real teamwork.</p>
+            </div>
           </div>
-        </div>
 
+          <div class="value-item" #valueItem>
+            <span class="val-num">05</span>
+            <div class="val-body">
+              <h3>Impact</h3>
+              <p>Making a measurable difference in the healthcare and pharma industries.</p>
+            </div>
+          </div>
+
+          <div class="value-item" #valueItem>
+            <span class="val-num">06</span>
+            <div class="val-body">
+              <h3>Lifelong Learning</h3>
+              <p>We support continuous growth and knowledge sharing at every career stage.</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 

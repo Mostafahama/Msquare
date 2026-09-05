@@ -1,78 +1,153 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <section class="hero" id="hero" #heroSection>
-      <div class="hero-bg">
-        <img src="assets/Hero section.webp" alt="M Square Healthcare" class="hero-bg-img" #heroBgImg>
-        <div class="hero-overlay"></div>
-      </div>
-      <div class="hero-content" #heroContent>
-        <h1 class="hero-title">
-          <span class="hw hw1"><span class="hw-inner" #hwInner>Transform</span></span>
-          <span class="hw hw2"><span class="hw-inner" #hwInner>Healthcare Events</span></span>
-          <span class="hw hw3"><span class="hw-inner" #hwInner>Into Impact</span></span>
-        </h1>
-        <p class="hero-sub" #heroSub>Expert-driven conferences, seamless CME accreditation, and cutting-edge event solutions for the pharmaceutical and medical industries.</p>
-      </div>
-      <div class="hero-scroll"><p>Scroll to explore</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-    </section>
-  `,
+  imports: [CommonModule, MagneticButtonDirective, DrawSvgButtonDirective],
+  templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss']
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('heroSection') heroSection!: ElementRef;
-  @ViewChild('heroBgImg') heroBgImg!: ElementRef;
-  @ViewChild('heroContent') heroContent!: ElementRef;
-  @ViewChild('heroSub') heroSub!: ElementRef;
-  @ViewChildren('hwInner') hwInners!: QueryList<ElementRef>;
+  @ViewChild('heroSection') heroSection!: ElementRef<HTMLElement>;
+  @ViewChild('heroBgWrap') heroBgWrap!: ElementRef<HTMLElement>;
+  @ViewChild('heroBgImg') heroBgImg!: ElementRef<HTMLElement>;
+  @ViewChild('heroOverlay') heroOverlay!: ElementRef<HTMLElement>;
+  @ViewChild('heroContent') heroContent!: ElementRef<HTMLElement>;
+  @ViewChild('heroTitle') heroTitle!: ElementRef<HTMLElement>;
+  @ViewChild('heroSub') heroSub!: ElementRef<HTMLElement>;
+  @ViewChild('heroActions') heroActions!: ElementRef<HTMLElement>;
+  @ViewChild('heroScroll') heroScroll!: ElementRef<HTMLElement>;
 
   private ctx!: gsap.Context;
 
   ngAfterViewInit() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const inners = this.hwInners.toArray().map(el => el.nativeElement);
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     this.ctx = gsap.context(() => {
       if (prefersReducedMotion) {
-        // Skip all animation — show final state immediately
-        gsap.set(inners, { yPercent: 0, rotation: 0 });
-        gsap.set(this.heroSub.nativeElement, { opacity: 0.9, y: 0 });
+        gsap.set(this.heroContent.nativeElement, { opacity: 1, y: 0 });
+        gsap.set(this.heroSub.nativeElement, { opacity: 0.92, y: 0, filter: 'blur(0px)' });
+        gsap.set(this.heroActions.nativeElement, { opacity: 1, y: 0 });
         gsap.set(this.heroBgImg.nativeElement, { scale: 1 });
         return;
       }
 
-      // Initial states
-      gsap.set(inners, { yPercent: 120, rotation: 2 });
-      gsap.set(this.heroSub.nativeElement, { opacity: 0, y: 20 });
+      // ── New 2026 Luxury Ethereal Blur-Up Reveal for Hero Title ─
+      const split = new SplitText(this.heroTitle.nativeElement.querySelectorAll('.hero-line'), {
+        type: 'words'
+      });
 
-      const heroTL = gsap.timeline({ defaults: { ease: 'power4.out' } });
+      gsap.set(split.words, {
+        y: 45,
+        opacity: 0,
+        filter: 'blur(16px)',
+        scale: 1.05,
+        transformOrigin: '50% 100%'
+      });
 
-      // Background slow zoom out
-      heroTL.to(this.heroBgImg.nativeElement, { scale: 1, duration: 4, ease: 'power2.out' }, 0);
+      gsap.set(this.heroSub.nativeElement, {
+        opacity: 0,
+        y: 25,
+        filter: 'blur(12px)'
+      });
 
-      // Cinematic word-by-word reveal with letter-spacing settle-in
-      heroTL
-        .to(inners, { yPercent: 0, rotation: 0, duration: 1.2, stagger: 0.15 }, 0.2)
-        .to(this.heroSub.nativeElement, { opacity: 0.9, y: 0, duration: 1.2, ease: 'power2.out' }, 0.8);
+      gsap.set(this.heroActions.nativeElement, {
+        opacity: 0,
+        y: 20
+      });
 
-      // Parallax scroll — content drifts up as hero leaves viewport
-      gsap.to(this.heroContent.nativeElement, {
-        scrollTrigger: {
-          trigger: this.heroSection.nativeElement,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1
-        },
-        y: 80, opacity: 0.3, ease: 'none'
+      const heroTL = gsap.timeline();
+
+      // Background slow subtle settle
+      heroTL.to(this.heroBgImg.nativeElement, {
+        scale: 1,
+        duration: 3,
+        ease: 'power2.out'
+      }, 0);
+
+      // Words cinematic focus-in
+      heroTL.to(split.words, {
+        y: 0,
+        opacity: 1,
+        filter: 'blur(0px)',
+        scale: 1,
+        duration: 1.15,
+        stagger: 0.08,
+        ease: 'power3.out'
+      }, 0.15);
+
+      // Subtitle soft focus-in
+      heroTL.to(this.heroSub.nativeElement, {
+        y: 0,
+        opacity: 0.92,
+        filter: 'blur(0px)',
+        duration: 1,
+        ease: 'power3.out'
+      }, 0.55);
+
+      // Action buttons smooth entrance
+      heroTL.to(this.heroActions.nativeElement, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power3.out'
+      }, 0.85);
+
+      // ── Contained Hero Scroll Scale-Down (Desktop Only, Never bleeds into next section)
+      const mm = gsap.matchMedia();
+
+      mm.add('(min-width: 1024px)', () => {
+        // Hero image shrinks cleanly into a rounded frame WITHIN the hero section as user scrolls
+        gsap.to(this.heroBgWrap.nativeElement, {
+          scale: 0.88,
+          borderRadius: '32px',
+          boxShadow: '0 28px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 168, 83, 0.25)',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: this.heroSection.nativeElement,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+          }
+        });
+
+        // Content fades and drifts up smoothly as hero scrolls
+        gsap.to(this.heroContent.nativeElement, {
+          yPercent: -40,
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: this.heroSection.nativeElement,
+            start: 'top top',
+            end: '70% top',
+            scrub: 1,
+          }
+        });
+
+        // Scroll prompt fades quickly
+        gsap.to(this.heroScroll.nativeElement, {
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: this.heroSection.nativeElement,
+            start: 'top top',
+            end: '25% top',
+            scrub: 1,
+          }
+        });
+      });
+
+      mm.add('(max-width: 1023px)', () => {
+        gsap.set([this.heroBgWrap.nativeElement, this.heroContent.nativeElement, this.heroBgImg.nativeElement], {
+          clearProps: 'all'
+        });
       });
 
     }, this.heroSection.nativeElement);

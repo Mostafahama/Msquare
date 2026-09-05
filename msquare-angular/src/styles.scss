@@ -209,6 +209,50 @@ body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
   &:hover { color: var(--white); }
 }
 
+/* DrawSVG signature button variant */
+.btn-drawsvg {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none !important;
+  padding: 14px 32px;
+  overflow: visible;
+  color: var(--white);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  &::before {
+    background: rgba(212, 168, 83, 0.15);
+    border-radius: 6px;
+  }
+
+  .draw-rect-svg {
+    position: absolute;
+    inset: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    pointer-events: none;
+    overflow: visible;
+
+    .draw-path {
+      fill: transparent;
+      stroke: var(--gold);
+      stroke-width: 2px;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  &:hover {
+    color: var(--gold-light);
+    box-shadow: 0 0 24px rgba(212, 168, 83, 0.25);
+  }
+}
+
 /* ── 10. NAV UNDERLINE DRAW-IN ─────────────────────────────────── */
 .nav-underline-link {
   position: relative;
@@ -220,7 +264,7 @@ body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
     bottom: -3px;
     left: 0;
     width: 100%;
-    height: 1.5px;
+    height: 2px;
     background: var(--gold);
     transform: scaleX(0);
     transform-origin: left center;
@@ -309,6 +353,89 @@ body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
   50%       { opacity: 0.5; transform: scale(0.8); }
 }
 
+/* ── 14. ACCENT TEXT COLOR ─────────────────────────────────────── */
+.gold-text {
+  color: var(--gold);
+}
+
+/* ── 15. VERTICAL SCROLL STORYTELLING CHROME ───────────────────── */
+.vm-cards-wrap {
+  position: relative;
+}
+
+.vm-connector {
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  bottom: 15px;
+  width: 2px;
+  background: rgba(212, 168, 83, 0.2);
+  transform: translateX(-50%);
+  overflow: hidden;
+  z-index: 1;
+
+  .vm-connector-line {
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    transform-origin: top center;
+    transform: scaleY(0);
+    will-change: transform;
+    box-shadow: 0 0 8px var(--gold);
+  }
+}
+
+@media (max-width: 768px) {
+  .vm-connector { display: none; }
+}
+
+.values-grid-wrap {
+  position: relative;
+  padding-left: 28px;
+}
+
+.values-spine-track {
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+
+  .values-spine-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), var(--gold-light));
+    transform-origin: top center;
+    transform: scaleY(0);
+    will-change: transform;
+    box-shadow: 0 0 10px rgba(212, 168, 83, 0.5);
+  }
+}
+
+.value-item {
+  position: relative;
+  transition: transform 0.35s var(--ease);
+
+  .val-num {
+    transition: color 0.3s var(--ease), transform 0.3s var(--ease), text-shadow 0.3s var(--ease);
+  }
+
+  &.val-active {
+    transform: translateX(8px);
+
+    .val-num {
+      color: var(--gold) !important;
+      text-shadow: 0 0 16px rgba(212, 168, 83, 0.5);
+      transform: scale(1.12);
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .badge-upcoming::before { animation: none; }
+  .vm-connector .vm-connector-line { transform: scaleY(1) !important; }
+  .values-spine-track .values-spine-fill { transform: scaleY(1) !important; }
 }

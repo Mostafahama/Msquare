@@ -1,10 +1,11 @@
 import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MagneticButtonDirective } from '../shared/button-fx.directive';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MagneticButtonDirective],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

@@ -32,6 +32,10 @@
 /* Contact items — clickable link rows with SVG icons + arrow nudge */
 .ct-items { display: flex; flex-direction: column; gap: 8px; }
 
+.ct-action-wrap {
+  margin-top: 28px;
+}
+
 .ct-link {
   display: flex;
   gap: 16px;

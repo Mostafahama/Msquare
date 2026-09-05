@@ -109,7 +109,7 @@
 .nav-link {
   font-family: var(--fd);
   font-size: var(--fs-caption);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: var(--ls-caps);
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
@@ -133,6 +133,7 @@
 
   &:hover {
     color: var(--gold);
+    font-weight: 700;
     &::after { transform: scaleX(1); }
   }
 

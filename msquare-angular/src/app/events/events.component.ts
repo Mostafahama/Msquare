@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export interface Event {
   id: string;
@@ -26,6 +27,7 @@ export interface Event {
 })
 export class EventsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('eventsSec') eventsSec!: ElementRef<HTMLElement>;
+  @ViewChild('evTitle') evTitle!: ElementRef<HTMLElement>;
 
   private ctx!: gsap.Context;
 
@@ -200,11 +202,27 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     this.ctx = gsap.context(() => {
       if (prefersReducedMotion) return;
 
-      // Section heading fade-up — single, once
-      gsap.from('.ev-main-title, .ev-main-sub, .filter-pills', {
-        y: 40,
+      // ── Font Effect (a): SplitText line reveal on Events heading
+      if (this.evTitle?.nativeElement) {
+        const splitEv = new SplitText(this.evTitle.nativeElement, { type: 'lines', mask: 'lines' });
+        gsap.from(splitEv.lines, {
+          yPercent: 110,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: this.evTitle.nativeElement,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        });
+      }
+
+      // Subtitle & filter pills fade-up
+      gsap.from('.ev-main-sub, .filter-pills', {
+        y: 30,
         opacity: 0,
-        duration: 0.9,
+        duration: 0.8,
         stagger: 0.12,
         ease: 'power3.out',
         scrollTrigger: {
@@ -216,7 +234,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
 
       // Stagger each event card wrapper — not individual images inside
       gsap.from('.ev-block', {
-        y: 50,
+        y: 45,
         opacity: 0,
         duration: 0.8,
         stagger: 0.15,

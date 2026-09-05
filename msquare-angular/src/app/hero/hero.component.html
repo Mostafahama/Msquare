@@ -1,1 +1,39 @@
-<p>hero works!</p>
+<section class="hero" id="hero" #heroSection>
+  <div class="hero-bg-stage" #heroStage>
+    <div class="hero-bg-wrap" #heroBgWrap>
+      <img src="assets/Hero section.webp" alt="M Square Healthcare Conference" class="hero-bg-img" #heroBgImg width="1920" height="1080" fetchpriority="high">
+      <div class="hero-overlay" #heroOverlay></div>
+    </div>
+  </div>
+
+  <div class="hero-content" #heroContent>
+    <h1 class="hero-title" #heroTitle>
+      <span class="hero-line">Transform</span>
+      <span class="hero-line hero-highlight">Healthcare Events</span>
+      <span class="hero-line">Into <span class="gold-text">Impact</span></span>
+    </h1>
+    <p class="hero-sub" #heroSub>Expert-driven conferences, seamless CME accreditation, and cutting-edge event solutions for the pharmaceutical and medical industries.</p>
+    
+    <div class="hero-actions" #heroActions>
+      <a href="#contact" class="btn btn-primary btn-magnetic" appMagnetic>
+        <span>Partner With Us</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+      <a href="#services" class="btn btn-drawsvg" appDrawSvg>
+        <span>Explore Solutions</span>
+        <svg class="draw-rect-svg" preserveAspectRatio="none" aria-hidden="true">
+          <rect class="draw-path" x="1" y="1" width="98%" height="96%" rx="6" ry="6"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" #heroScroll>
+    <p>Scroll to explore</p>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+</section>

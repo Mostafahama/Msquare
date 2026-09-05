@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export interface Partner {
   name: string;
@@ -14,7 +19,10 @@ export interface Partner {
   templateUrl: './partners.component.html',
   styleUrls: ['./partners.component.scss']
 })
-export class PartnersComponent {
+export class PartnersComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('ptTitle') ptTitle!: ElementRef<HTMLElement>;
+
+  private ctx!: gsap.Context;
   isPaused = false;
 
   readonly partners: Partner[] = [
@@ -43,7 +51,6 @@ export class PartnersComponent {
     { name: 'ENGAZ Initiative', abbr: 'ENGAZ' },
   ];
 
-  // Duplicate for seamless infinite marquee loop
   get marqueeRow1(): Partner[] {
     return [...this.partners.slice(0, 10), ...this.partners.slice(0, 10)];
   }
@@ -54,4 +61,45 @@ export class PartnersComponent {
 
   pauseMarquee() { this.isPaused = true; }
   resumeMarquee() { this.isPaused = false; }
+
+  ngAfterViewInit() {
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    this.ctx = gsap.context(() => {
+      if (prefersReducedMotion) return;
+
+      // ── Font Effect (a): SplitText line reveal on Partners heading
+      if (this.ptTitle?.nativeElement) {
+        const splitPt = new SplitText(this.ptTitle.nativeElement, { type: 'lines', mask: 'lines' });
+        gsap.from(splitPt.lines, {
+          yPercent: 110,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: this.ptTitle.nativeElement,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        });
+      }
+
+      // Subtitle fade-up
+      gsap.from('.partners-sub', {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.partners-sub',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.ctx?.revert();
+  }
 }
