@@ -1,90 +1,216 @@
-/* ── EVENTS ─────────────────────────────────────────────────────── */
+/* ── EVENTS: VERTICAL STORYTELLING TIMELINE ─────────────────────── */
 .events {
-  padding: 110px 0 140px;
+  padding: 120px 0 140px;
   background: var(--white);
+  position: relative;
+  overflow: hidden;
 }
 
-.ev-eyebrow { justify-content: flex-start; }
+.ev-header {
+  max-width: 760px;
+  margin-bottom: 50px;
+}
+
+.ev-eyebrow {
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
 
 .ev-main-title {
   font-size: var(--fs-h1);
   color: var(--navy);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  line-height: var(--lh-heading);
 }
 
 .ev-main-sub {
   color: var(--text2);
   font-size: var(--fs-body-lg);
-  margin-bottom: 40px;
-  max-width: 560px;
+  line-height: var(--lh-body);
+  margin-bottom: 32px;
 }
 
-/* ─── CSS-native horizontal scroll with snap ─────────────────────
-   Users swipe with trackpad/touch — vertical mouse wheel scrolls
-   the page normally. No JS scroll hijacking.
-────────────────────────────────────────────────────────────────── */
-.events-scroll-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--gold) transparent;
-  padding-bottom: 20px;
-  cursor: grab;
-
-  &:active { cursor: grabbing; }
-
-  &::-webkit-scrollbar { height: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
-}
-
-.events-scroll-container {
+/* ── Filter Pills ── */
+.filter-pills {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 6vw;
-  width: max-content;
-  padding: 0 5vw 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.ev-block {
-  width: 82vw;
-  max-width: 960px;
-  flex-shrink: 0;
-  scroll-snap-align: start;
+/* ── Timeline Wrap ── */
+.ev-timeline-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  margin: 70px auto 0;
+  padding: 20px 0 60px;
+}
+
+/* Central vertical spine drawn via GSAP DrawSVG / ScrollTrigger */
+.timeline-spine-track {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+
+  .timeline-spine-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    .spine-line-bg {
+      stroke: rgba(26, 26, 64, 0.08);
+      stroke-width: 2;
+    }
+
+    .spine-line-draw {
+      stroke: var(--gold);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(212, 168, 83, 0.5));
+    }
+  }
+}
+
+/* ── Timeline Rows ── */
+.timeline-rows {
   display: flex;
   flex-direction: column;
+  gap: 80px;
+  position: relative;
+  z-index: 2;
 }
 
-@media (max-width: 768px) {
-  .ev-block { width: 88vw; }
-  .events-scroll-container { gap: 10vw; }
+.timeline-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+
+  /* Alternating left and right layout on desktop */
+  &.is-odd {
+    justify-content: flex-start;
+
+    .ev-timeline-card {
+      width: calc(50% - 56px);
+      margin-right: auto;
+    }
+  }
+
+  &.is-even {
+    justify-content: flex-end;
+
+    .ev-timeline-card {
+      width: calc(50% - 56px);
+      margin-left: auto;
+    }
+  }
 }
 
-/* ── Event info panel ── */
-.ev-info { margin-bottom: 28px; }
+/* ── Center Date Node ── */
+.timeline-node {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+  pointer-events: none;
 
-.ev-meta {
+  .node-ring {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--white);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
+
+    .node-core {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background-color 0.35s var(--ease), transform 0.35s var(--ease);
+    }
+  }
+
+  .node-date-tag {
+    font-family: var(--fd);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text2);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.35s var(--ease);
+    opacity: 0.85;
+  }
+
+  /* When scroll reaches this node */
+  &.node-active {
+    .node-ring {
+      border-color: var(--gold);
+      box-shadow: 0 0 18px rgba(212, 168, 83, 0.65);
+      transform: scale(1.2);
+
+      .node-core {
+        background: var(--gold);
+        transform: scale(1.1);
+      }
+    }
+
+    .node-date-tag {
+      color: var(--navy);
+      opacity: 1;
+    }
+  }
+}
+
+/* ── Event Timeline Card ── */
+.ev-timeline-card {
+  background: var(--white);
+  border: 1px solid rgba(26, 26, 64, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(26, 26, 64, 0.04);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 45px rgba(26, 26, 64, 0.08);
+    border-color: rgba(212, 168, 83, 0.35);
+  }
+}
+
+.ev-card-meta {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-.ev-date {
+.ev-date-badge {
   font-family: var(--fd);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--gold);
-  font-weight: 600;
+  font-weight: 700;
 }
 
-/* Category badge */
 .ev-cat-badge {
   font-family: var(--fd);
   font-size: 0.7rem;
@@ -96,124 +222,214 @@
   border: 1.5px solid currentColor;
 }
 
-.ev-cat-medical  { color: var(--blue); }
-.ev-cat-career   { color: var(--navy); }
+.ev-cat-medical   { color: var(--blue); }
+.ev-cat-career    { color: var(--navy); }
 .ev-cat-community { color: var(--gold); }
 
-.ev-name {
+.ev-card-title {
   font-size: var(--fs-h2);
-  color: var(--text);
-  margin: 4px 0 10px;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height: var(--lh-heading);
 }
 
-.ev-desc {
+.ev-card-desc {
   color: var(--text2);
-  font-size: var(--fs-body-lg);
-  max-width: 560px;
+  font-size: var(--fs-body);
   line-height: var(--lh-body);
+  margin-bottom: 18px;
 }
 
-/* ── Gallery Layout Variants ─────────────────────────────────────
-   Images render at full opacity immediately — no scroll-gated reveal.
-   Only the .ev-block wrapper animates once on scroll entrance (GSAP).
-────────────────────────────────────────────────────────────────── */
-.ev-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+/* ── Media Showcase with Diagonal-Wipe Transition Motif ── */
+.ev-photo-stage-wrap {
+  margin-top: 14px;
+}
+
+.ev-photo-stage {
+  position: relative;
   width: 100%;
-}
+  height: 290px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--navy-deep);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 
-/* Mosaic: asymmetric layout, first item larger */
-.ev-gallery-mosaic {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 280px 180px;
-  gap: 12px;
+  /* Photographs always render at full opacity immediately (per §1 Non-Negotiables) */
+  .ev-base-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    z-index: 1;
+  }
 
-  .mo-item:first-child {
-    grid-row: 1 / 3;
-    height: auto;
+  .ev-wiping-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    z-index: 2;
+    clip-path: var(--wipe-diagonal-end);
+    will-change: clip-path;
+  }
+
+  .ev-wipe-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--gold-light);
+    font-family: var(--fd);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgba(212, 168, 83, 0.3);
+
+    .wipe-motif-icon {
+      color: var(--gold);
+      font-weight: 800;
+    }
   }
 }
 
-/* Grid: even columns */
-.ev-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-/* Cinema: horizontal filmstrip */
-.ev-gallery-cinema {
+.ev-thumb-strip {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 12px;
+  gap: 8px;
+  margin-top: 12px;
   overflow-x: auto;
+  padding-bottom: 4px;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 }
 
-.mo-item {
-  height: 260px;
-  border-radius: 10px;
+.ev-thumb-btn {
+  width: 60px;
+  height: 44px;
+  border-radius: 6px;
   overflow: hidden;
-  position: relative;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+  transition: opacity 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
+  opacity: 0.65;
   flex-shrink: 0;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Images always visible — no opacity:0 default */
-    opacity: 1;
-    transition: transform 0.5s var(--ease);
   }
 
-  &:hover img { transform: scale(1.05); }
+  &:hover, &.active {
+    opacity: 1;
+    border-color: var(--gold);
+    transform: scale(1.06);
+  }
 }
 
-.ev-gallery-cinema .mo-item {
-  width: 320px;
-  height: 220px;
-}
-
-@media (max-width: 768px) {
-  .mo-item { height: 200px; }
-  .ev-gallery-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-  .ev-gallery-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ── No-photos placeholder ── */
-.ev-no-photos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  height: 200px;
-  border-radius: 10px;
-  border: 2px dashed var(--border);
-  color: var(--text2);
-  font-size: var(--fs-body);
+/* ── Archival Conference Card (when no photos) ── */
+.ev-archival-card {
+  margin-top: 16px;
+  padding: 20px 24px;
   background: var(--subtle);
-  width: 100%;
+  border-radius: 12px;
+  border: 1px dashed rgba(26, 26, 64, 0.15);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  .ev-archival-icon {
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ev-archival-title {
+    font-family: var(--fd);
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .ev-archival-desc {
+    font-size: var(--fs-caption);
+    color: var(--text2);
+    line-height: var(--lh-body);
+    margin: 0;
+  }
 }
 
-/* Cinematic label overlay */
-.cin-label {
-  position: absolute;
-  bottom: 12px; left: 12px;
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  padding: 4px 12px;
-  font-size: var(--fs-caption);
-  font-weight: 600;
-  border-radius: 100px;
-  letter-spacing: 0.5px;
-  z-index: 2;
+/* ── Mobile & Tablet Responsive Flow ── */
+@media (max-width: 991px) {
+  .events {
+    padding: 80px 0 100px;
+  }
+
+  .ev-timeline-wrap {
+    margin-top: 40px;
+  }
+
+  .timeline-spine-track {
+    left: 20px;
+    transform: none;
+  }
+
+  .timeline-rows {
+    gap: 48px;
+  }
+
+  .timeline-row {
+    flex-direction: column;
+    padding-left: 52px;
+
+    &.is-odd .ev-timeline-card,
+    &.is-even .ev-timeline-card {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  .timeline-node {
+    left: 20px;
+    transform: translateX(-50%);
+    top: 16px;
+
+    .node-date-tag {
+      display: none; /* Keep clean on small viewports, date badge is on card */
+    }
+  }
+
+  .ev-timeline-card {
+    padding: 24px;
+  }
+
+  .ev-photo-stage {
+    height: 220px;
+  }
 }
 
-@media (max-width: 768px) {
-  .events { padding: 72px 0 96px; }
+@media (prefers-reduced-motion: reduce) {
+  .ev-timeline-card {
+    transition: none;
+    &:hover { transform: none; }
+  }
+
+  .ev-wiping-img {
+    clip-path: none !important;
+    transition: opacity 0.3s ease;
+  }
 }
+

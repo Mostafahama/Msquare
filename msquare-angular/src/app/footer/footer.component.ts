@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { MagneticButtonDirective } from '../shared/button-fx.directive';
+import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, MagneticButtonDirective],
+  imports: [CommonModule, MagneticButtonDirective, DrawSvgButtonDirective],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

@@ -4,8 +4,9 @@ import { DOCUMENT } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
 
 export interface Event {
   id: string;
@@ -14,7 +15,6 @@ export interface Event {
   category: 'medical' | 'career' | 'community';
   description: string;
   images: string[];
-  galleryLayout: 'mosaic' | 'grid' | 'cinema';
   status: 'past' | 'upcoming';
 }
 
@@ -28,10 +28,15 @@ export interface Event {
 export class EventsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('eventsSec') eventsSec!: ElementRef<HTMLElement>;
   @ViewChild('evTitle') evTitle!: ElementRef<HTMLElement>;
+  @ViewChild('spineLine') spineLine!: ElementRef<SVGLineElement>;
 
   private ctx!: gsap.Context;
+  private mm!: gsap.MatchMedia;
 
   activeFilter: 'medical' | 'career' | 'community' = 'medical';
+
+  // Photo switching state map for diagonal-wipe transitions
+  activeImageMap: { [eventId: string]: { current: number; previous: number; isTransitioning: boolean } } = {};
 
   readonly events: Event[] = [
     // ── Medical & Scientific Conferences ─────────────────────────
@@ -40,7 +45,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'Pulmo PortSaid Conference',
       date: '18 April 2025',
       category: 'medical',
-      description: 'A premier pulmonology conference bringing together leading respiratory specialists for knowledge exchange and clinical updates.',
+      description: 'A premier pulmonology conference bringing together leading respiratory specialists for clinical updates, masterclasses, and hands-on diagnostic sessions.',
       images: [
         'assets/pulmo event/Pulmo event-10.webp',
         'assets/pulmo event/Pulmo event-23.webp',
@@ -48,7 +53,6 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
         'assets/pulmo event/Pulmo event-48.webp',
         'assets/pulmo event/Pulmo event-52.webp',
       ],
-      galleryLayout: 'mosaic',
       status: 'past',
     },
     {
@@ -56,9 +60,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'Pulmo PortSaid II',
       date: '23–24 April 2026',
       category: 'medical',
-      description: 'The second edition of the acclaimed pulmonology conference, featuring expanded multidisciplinary sessions and international speakers.',
+      description: 'The second edition of the acclaimed pulmonology conference, featuring expanded multidisciplinary sessions, international keynotes, and clinical workshops.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -66,9 +69,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'PortSaid Otolaryngology Conference',
       date: '5 September 2024',
       category: 'medical',
-      description: 'A specialist ENT conference addressing the latest advances in otolaryngology, head and neck surgery.',
+      description: 'A specialist ENT conference addressing the latest advances in otolaryngology, surgical interventions, and head and neck clinical care.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -76,34 +78,31 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'Sleep Apnea Scientific Day',
       date: '27 June 2024',
       category: 'medical',
-      description: '"Understanding Sleep Apnea: A Multidisciplinary Approach" — an expert-led scientific day exploring diagnosis, management, and innovation.',
+      description: '"Understanding Sleep Apnea: A Multidisciplinary Approach" — an expert-led scientific gathering exploring diagnosis, ventilatory support, and therapy protocols.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     // ── Career, Internship & Job Fairs ────────────────────────────
-    {
-      id: 'pharmacy-career-1',
-      title: 'Pharmacy Career Spot I',
-      date: '1 March 2024',
-      category: 'career',
-      description: 'The inaugural Pharmacy Career Spot, connecting pharmacy students with top pharmaceutical companies and industry professionals.',
-      images: [],
-      galleryLayout: 'cinema',
-      status: 'past',
-    },
     {
       id: 'pharmacy-career-2',
       title: 'Pharmacy Career Spot II',
       date: '11 April 2025',
       category: 'career',
-      description: 'Connecting pharmacy students with top pharmaceutical companies and industry professionals for career development.',
+      description: 'Connecting future clinical pharmacists with top multinational pharmaceutical manufacturers, regulatory leaders, and clinical training directors.',
       images: [
         'assets/Pharmacy Career Spot/Pharmacy Career Spot-16.webp',
         'assets/Pharmacy Career Spot/Pharmacy Career Spot-127.webp',
         'assets/Pharmacy Career Spot/Pharmacy Career Spot-139.webp',
       ],
-      galleryLayout: 'cinema',
+      status: 'past',
+    },
+    {
+      id: 'pharmacy-career-1',
+      title: 'Pharmacy Career Spot I',
+      date: '1 March 2024',
+      category: 'career',
+      description: 'The inaugural Pharmacy Career Spot convening students and pharmacy leaders to map emerging career pathways in healthcare.',
+      images: [],
       status: 'past',
     },
     {
@@ -111,9 +110,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: '4th Career Fair, Galala University',
       date: '5 May 2026',
       category: 'career',
-      description: "The 4th edition of Galala University's annual career fair, connecting graduating students with Egypt's leading employers.",
+      description: "The 4th annual career fair at Galala University, connecting university graduates with leading regional healthcare and pharma organizations.",
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -121,9 +119,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'HUE Job Fair',
       date: '2022',
       category: 'career',
-      description: 'A large-scale university job fair bringing together Horus University students and top industry recruiters.',
+      description: 'A major university job fair bringing together Horus University students and corporate recruitment leaders in medical industries.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     // ── Community, Youth & CSR Initiatives ───────────────────────
@@ -132,16 +129,14 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'ENGAZ PortSaid Celebrations',
       date: '26–27 December 2025',
       category: 'community',
-      description: 'A grand celebration event marking achievements and milestones with interactive sessions and community networking.',
+      description: 'A benchmark civic celebration honoring regional milestones and youth initiatives through interactive assemblies and community networking.',
       images: [
         'assets/engaz event/Engaz Events 3-253.webp',
         'assets/engaz event/Engaz Events 3.1-12.webp',
         'assets/engaz event/Engaz Events 3.1-27.webp',
         'assets/engaz event/Engaz Events 3.1-53.webp',
         'assets/engaz event/Engaz Events 3.1-6.webp',
-        'assets/engaz event/Engaz Events 3.1-8.webp',
       ],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -149,9 +144,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'نتعلم إيه وإزاي — AI Learning Exhibition',
       date: '13 June 2025',
       category: 'community',
-      description: 'An educational exhibition exploring AI-era learning frameworks for Egyptian youth, fostering digital literacy and critical thinking.',
+      description: 'An educational exhibition investigating AI-era learning paradigms and digital health applications for emerging talents.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -159,9 +153,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'عرض شارع العلوم (Street of Science)',
       date: '2023',
       category: 'community',
-      description: 'An immersive outdoor science exhibition bringing interactive learning experiences to the Port Said community.',
+      description: 'An open-air science engagement fair translating complex medical and scientific principles into interactive demonstrations for the community.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -169,9 +162,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'Tekno Square Academy Anniversary',
       date: '2024',
       category: 'community',
-      description: "Celebrating one year of Tekno Square Academy's impact in STEM and professional development education.",
+      description: "Marking one year of educational impact with Tekno Square Academy in medical sciences, technology, and applied learning.",
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
     {
@@ -179,9 +171,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       title: 'PortSaid Skating Day',
       date: '2023',
       category: 'community',
-      description: 'A community sports and recreation event fostering youth engagement and healthy lifestyle advocacy in Port Said.',
+      description: 'A civic youth wellness initiative promoting active lifestyles, preventative health habits, and sports participation across Port Said.',
       images: [],
-      galleryLayout: 'grid',
       status: 'past',
     },
   ];
@@ -190,11 +181,66 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     return this.events.filter(e => e.category === this.activeFilter);
   }
 
-  filterBy(cat: 'medical' | 'career' | 'community') {
-    this.activeFilter = cat;
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    // Initialize photo switching state
+    this.events.forEach(e => {
+      this.activeImageMap[e.id] = { current: 0, previous: 0, isTransitioning: false };
+    });
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  filterBy(cat: 'medical' | 'career' | 'community') {
+    this.activeFilter = cat;
+    // Reset image indices for this filter
+    this.filteredEvents.forEach(e => {
+      this.activeImageMap[e.id] = { current: 0, previous: 0, isTransitioning: false };
+    });
+
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+      this.setupTimelineScroll();
+    }, 60);
+  }
+
+  /**
+   * Signature Diagonal-Wipe Image Transition Motif (§7)
+   * Shallow ~25° diagonal polygon wipe revealing the new image smoothly over the previous one.
+   */
+  switchImage(event: Event, targetIndex: number, stageEl?: HTMLElement) {
+    const state = this.activeImageMap[event.id];
+    if (!state || state.current === targetIndex || state.isTransitioning) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prevIndex = state.current;
+    state.previous = prevIndex;
+    state.current = targetIndex;
+    state.isTransitioning = true;
+
+    const container = stageEl || document.getElementById(`wipe-stage-${event.id}`);
+    const wipingImg = container?.querySelector<HTMLElement>('.ev-wiping-img');
+
+    if (!wipingImg || prefersReduced) {
+      state.previous = targetIndex;
+      state.isTransitioning = false;
+      return;
+    }
+
+    // Diagonal polygon wipe ~25°: polygon(0 0, 0 0, -25% 100%, 0 100%) -> polygon(0 0, 125% 0, 100% 100%, 0 100%)
+    gsap.fromTo(wipingImg,
+      {
+        clipPath: 'polygon(0 0, 0 0, -25% 100%, 0 100%)',
+        opacity: 1
+      },
+      {
+        clipPath: 'polygon(0 0, 125% 0, 100% 100%, 0 100%)',
+        duration: 0.65,
+        ease: 'power3.inOut',
+        onComplete: () => {
+          state.previous = targetIndex;
+          state.isTransitioning = false;
+        }
+      }
+    );
+  }
 
   ngAfterViewInit() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -202,12 +248,12 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     this.ctx = gsap.context(() => {
       if (prefersReducedMotion) return;
 
-      // ── Font Effect (a): SplitText line reveal on Events heading
+      // Heading SplitText Line Reveal (Font Effect 1)
       if (this.evTitle?.nativeElement) {
         const splitEv = new SplitText(this.evTitle.nativeElement, { type: 'lines', mask: 'lines' });
         gsap.from(splitEv.lines, {
           yPercent: 110,
-          duration: 0.9,
+          duration: 0.85,
           stagger: 0.1,
           ease: 'power3.out',
           scrollTrigger: {
@@ -218,38 +264,75 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
         });
       }
 
-      // Subtitle & filter pills fade-up
-      gsap.from('.ev-main-sub, .filter-pills', {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: this.eventsSec.nativeElement,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
-      });
-
-      // Stagger each event card wrapper — not individual images inside
-      gsap.from('.ev-block', {
-        y: 45,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.events-scroll-container',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
+      this.setupTimelineScroll();
 
     }, this.eventsSec.nativeElement);
   }
 
+  private setupTimelineScroll() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    this.mm?.revert();
+    this.mm = gsap.matchMedia();
+
+    // Desktop: center spine scrubbed with DrawSVG / scaleY
+    this.mm.add('(min-width: 992px)', () => {
+      if (this.spineLine?.nativeElement) {
+        gsap.fromTo(this.spineLine.nativeElement,
+          { drawSVG: '0% 0%' },
+          {
+            drawSVG: '0% 100%',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.ev-timeline-wrap',
+              start: 'top 70%',
+              end: 'bottom 80%',
+              scrub: 0.5,
+            }
+          }
+        );
+      }
+
+      // Date nodes active trigger on scroll
+      const nodes = gsap.utils.toArray<HTMLElement>('.timeline-node');
+      nodes.forEach((node) => {
+        ScrollTrigger.create({
+          trigger: node,
+          start: 'top 65%',
+          onEnter: () => node.classList.add('node-active'),
+          onLeaveBack: () => node.classList.remove('node-active'),
+        });
+      });
+
+      // Subtle card entrance (opacity 1 immediately for photos, translating card wrapper only)
+      const cards = gsap.utils.toArray<HTMLElement>('.ev-timeline-card');
+      cards.forEach((card) => {
+        gsap.from(card, {
+          y: 35,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        });
+      });
+    });
+
+    // Mobile fallback: simplified non-scrubbed vertical flow
+    this.mm.add('(max-width: 991px)', () => {
+      const nodes = gsap.utils.toArray<HTMLElement>('.timeline-node');
+      nodes.forEach((node) => {
+        node.classList.add('node-active');
+      });
+    });
+  }
+
   ngOnDestroy() {
+    this.mm?.revert();
     this.ctx?.revert();
   }
 }
+
