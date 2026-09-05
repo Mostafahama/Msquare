@@ -1,41 +1,36 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <nav class="navbar" id="navbar" [class.scrolled]="isScrolled">
-      <div class="nav-inner">
-        <a href="#" class="nav-brand">
-          <img src="assets/M SQUARE_Icon with background.png" alt="M Square Logo" class="brand-logo">
-          <span class="brand-text">MSQUARE</span>
-        </a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" (click)="toggleMenu()">
-          <span [style.transform]="isMenuOpen ? 'rotate(45deg) translate(5px,5px)' : ''"></span>
-          <span [style.opacity]="isMenuOpen ? '0' : ''"></span>
-          <span [style.transform]="isMenuOpen ? 'rotate(-45deg) translate(5px,-5px)' : ''"></span>
-        </button>
-        <ul class="nav-links" id="navMenu" [class.active]="isMenuOpen">
-          <li><a href="#services" (click)="closeMenu()">SERVICES</a></li>
-          <li><a href="#internships" (click)="closeMenu()">INTERNSHIPS</a></li>
-          <li><a href="#events" (click)="closeMenu()">EVENTS</a></li>
-          <li><a href="#partners" (click)="closeMenu()">PARTNERS</a></li>
-          <li><a href="#contact" (click)="closeMenu()">CONTACT</a></li>
-        </ul>
-      </div>
-    </nav>
-  `,
+  templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   isScrolled = false;
+  activeSection = '';
+
+  // Canonical section IDs in page order
+  private sectionIds = ['services', 'internships', 'events', 'partners', 'contact'];
+  private observer!: IntersectionObserver;
+
+  ngOnInit() {
+    this.setupIntersectionObserver();
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 60;
+    if (window.scrollY < 200) {
+      this.activeSection = '';
+    }
   }
 
   toggleMenu() {
@@ -44,5 +39,34 @@ export class HeaderComponent {
 
   closeMenu() {
     this.isMenuOpen = false;
+  }
+
+  private setupIntersectionObserver() {
+    const options: IntersectionObserverInit = {
+      root: null,
+      // Fire when section occupies the center third of the viewport
+      rootMargin: '-30% 0px -60% 0px',
+      threshold: 0,
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      if (window.scrollY < 200) {
+        this.activeSection = '';
+        return;
+      }
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.activeSection = entry.target.id;
+        }
+      });
+    }, options);
+
+    // Observe sections after DOM is ready
+    requestAnimationFrame(() => {
+      this.sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) this.observer.observe(el);
+      });
+    });
   }
 }

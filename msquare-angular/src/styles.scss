@@ -1,32 +1,314 @@
-/* ═══════════════════════════════════════
-   M SQUARE — Global Stylesheet
-   ═══════════════════════════════════════ */
-:root{
-  --navy:#1A1A40;--navy-deep:#0B0B2A;--white:#FFF;--text:#1A1A1A;--text2:#666;
-  --gold:#B8860B;--gold-light:#D4AF37;--blue:#2E5090;--subtle:#F5F5F5;--border:#E8E8E8;
-  --glass:rgba(255,255,255,.98);--ease:cubic-bezier(.4,0,.2,1);
-  --fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fp:'Poppins',sans-serif;
+/* ═══════════════════════════════════════════════════════════════════
+   M SQUARE — Global Design System
+   Single source of truth for tokens, typography, and shared patterns.
+   All components consume these tokens — no ad-hoc hex or clamp() values.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── SELF-HOSTED FONTS ─────────────────────────────────────────── */
+/* Primary body font: Open Sauce One (SIL-licensed, self-hosted)
+   Fallback: Inter (geometric-humanist, same DNA) */
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('assets/fonts/OpenSauceOne-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:var(--white);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--fd);line-height:1.2;font-weight:700}
-a{color:var(--blue);text-decoration:none;transition:color .25s var(--ease)}
-a:hover{color:var(--gold)}
-img{max-width:100%;height:auto;display:block}
-.container{max-width:1320px;margin:0 auto;padding:0 24px}
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('assets/fonts/OpenSauceOne-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('assets/fonts/OpenSauceOne-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('assets/fonts/OpenSauceOne-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
-/* Selection */
-::selection{background:var(--gold-light);color:var(--navy)}
+/* ── 1. COLOR TOKENS ───────────────────────────────────────────── */
+:root {
+  /* Primary — navy dominates: headings, nav, primary buttons */
+  --navy:        #1A1A40;
+  --navy-deep:   #0B0B2A; /* dark section backgrounds, footer, gradients */
 
-/* Custom Scrollbar */
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:var(--subtle)}
-::-webkit-scrollbar-thumb{background:var(--gold-light);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:var(--navy)}
+  /* Secondary accent — gold is a spice, never a large fill */
+  --gold:        #B8860B; /* CTAs, active states, key numerals, dividers */
+  --gold-light:  #D4AF37; /* hover states, gradient highlights, badges */
 
-/* ── SCROLL ANIMATIONS ── */
-body.gsap-ready [data-anim]{opacity:1;transform:translateY(0)}
-body:not(.gsap-ready) [data-anim]{opacity:1;transform:none}
+  /* Tertiary — sparing use only, never dominant */
+  --blue:        #2E5090; /* occasional gradient stop, links on dark bg */
 
-/* No custom cursor */
+  /* Neutrals */
+  --text:        #1A1A1A; /* body copy */
+  --text2:       #666666; /* secondary copy, captions */
+  --subtle:      #F5F5F5; /* section backgrounds */
+  --border:      #E8E8E8; /* hairlines, dividers */
+  --white:       #FFFFFF; /* base */
+
+  /* Utility */
+  --glass:       rgba(255, 255, 255, 0.98);
+  --ease:        cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── 2. TYPOGRAPHY TOKENS ──────────────────────────────────────
+     --fd (font-display): Poppins — headings/display
+     --fb (font-body):    Open Sauce One w/ Inter geometric fallback
+     Rule: every component uses these, never declares its own font-family.
+  */
+  --fd: 'Poppins', system-ui, sans-serif;
+  --fb: 'Open Sauce One', 'Inter', system-ui, sans-serif;
+
+  /* ── 3. TYPE SCALE ─────────────────────────────────────────────
+     Fluid via clamp(min, preferred, max).
+     Every component inherits from this scale — no ad-hoc font-size.
+  */
+  --fs-display: clamp(2.5rem, 6vw, 4.5rem);
+  --fs-h1:      clamp(2rem, 4.5vw, 3.5rem);
+  --fs-h2:      clamp(1.5rem, 3vw, 2.25rem);
+  --fs-h3:      clamp(1.125rem, 2vw, 1.5rem);
+  --fs-body-lg: clamp(1rem, 1.25vw, 1.125rem);
+  --fs-body:    clamp(0.875rem, 1vw, 1rem);
+  --fs-caption: clamp(0.75rem, 0.875vw, 0.875rem);
+
+  /* Matched line-heights */
+  --lh-display: 1.1;
+  --lh-heading: 1.2;
+  --lh-body:    1.65;
+  --lh-caption: 1.4;
+
+  /* Matched letter-spacings */
+  --ls-display: -0.02em;
+  --ls-heading: -0.01em;
+  --ls-caps:    0.08em;
+  --ls-body:    0;
+}
+
+/* ── 4. RESET & BASE ───────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+}
+
+body {
+  background: var(--white);
+  color: var(--text);
+  font-family: var(--fb);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fd);
+  line-height: var(--lh-heading);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--navy);
+}
+
+p { color: var(--text); line-height: var(--lh-body); }
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+  transition: color 0.25s var(--ease);
+  &:hover { color: var(--gold); }
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ── 5. LAYOUT ─────────────────────────────────────────────────── */
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+/* ── 6. SELECTION & SCROLLBAR ──────────────────────────────────── */
+::selection { background: var(--gold-light); color: var(--navy); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--subtle); }
+::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--navy); }
+
+/* ── 7. SCROLL ANIMATION BASE ──────────────────────────────────── */
+body.gsap-ready [data-anim] { opacity: 1; transform: translateY(0); }
+body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
+
+/* ── 8. PREFERS-REDUCED-MOTION ─────────────────────────────────
+   AppComponent adds class 'reduced-motion' to <html> when detected.
+   The CSS media query provides an additional safety net.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── 9. SHARED BUTTON COMPONENT ────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-family: var(--fd);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  text-decoration: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s var(--ease);
+    z-index: 0;
+  }
+
+  svg, .btn-icon { transition: transform 0.25s var(--ease); position: relative; z-index: 1; }
+  span { position: relative; z-index: 1; }
+
+  &:hover {
+    &::before { transform: scaleX(1); }
+    svg, .btn-icon { transform: translateX(4px); }
+  }
+  &:active { transform: translateY(1px); }
+}
+
+.btn-primary {
+  background: var(--navy); color: var(--white); border-color: var(--navy);
+  &::before { background: var(--gold); }
+  &:hover { color: var(--white); }
+}
+
+.btn-outline {
+  background: transparent; color: var(--navy); border-color: var(--navy);
+  &::before { background: var(--navy); }
+  &:hover { color: var(--white); }
+}
+
+/* ── 10. NAV UNDERLINE DRAW-IN ─────────────────────────────────── */
+.nav-underline-link {
+  position: relative;
+  text-decoration: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s var(--ease);
+  }
+
+  &:hover::after, &.active::after { transform: scaleX(1); }
+}
+
+/* ── 11. SECTION & CARD PATTERNS ───────────────────────────────── */
+.section-pad { padding: 100px 0; }
+@media (max-width: 768px) { .section-pad { padding: 64px 0; } }
+
+.eyebrow {
+  font-family: var(--fd);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1.5px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+}
+
+.accent-card { border-left: 3px solid var(--gold); padding-left: 20px; }
+
+/* ── 12. FILTER PILLS ───────────────────────────────────────────── */
+.filter-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+
+.pill-btn {
+  font-family: var(--fd);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+
+  &:hover { border-color: var(--gold); color: var(--gold); }
+  &.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+}
+
+/* ── 13. UPCOMING BADGE ─────────────────────────────────────────── */
+.badge-upcoming {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy-deep);
+  font-family: var(--fd);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--navy-deep);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-upcoming::before { animation: none; }
+}

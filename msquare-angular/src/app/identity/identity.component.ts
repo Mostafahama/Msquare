@@ -20,37 +20,41 @@ export class IdentityComponent implements AfterViewInit, OnDestroy {
   private ctx!: gsap.Context;
 
   ngAfterViewInit() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     this.ctx = gsap.context(() => {
+      if (!prefersReducedMotion) {
+        // VM header fade-up (not horizontal slide — brief says "confident and quiet")
+        gsap.from(this.leftCol.nativeElement, {
+          y: 30,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: this.identitySec.nativeElement,
+            start: 'top 78%',
+            toggleActions: 'play none none none',
+          }
+        });
 
-      // Left column slide in from left
-      gsap.from(this.leftCol.nativeElement, {
-        x: -60,
-        opacity: 0,
-        duration: 1.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: this.identitySec.nativeElement,
-          start: 'top 78%',
-          toggleActions: 'play none none none',
-        }
-      });
+        // Value items stagger up
+        const items = this.valueItems.toArray().map(r => r.nativeElement);
+        gsap.from(items, {
+          y: 24,
+          opacity: 0,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.values-grid',
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+          }
+        });
+      }
 
-      // Value items stagger in from right
+      // GSAP hover: gold number — works regardless of reduced-motion preference
       const items = this.valueItems.toArray().map(r => r.nativeElement);
-      gsap.from(items, {
-        x: 50,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.13,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: this.identitySec.nativeElement,
-          start: 'top 78%',
-          toggleActions: 'play none none none',
-        }
-      });
-
-      // GSAP hover: gold number on hover
       items.forEach(item => {
         const num = item.querySelector<HTMLElement>('.val-num');
         if (!num) return;
@@ -58,7 +62,7 @@ export class IdentityComponent implements AfterViewInit, OnDestroy {
         item.addEventListener('mouseleave', () => gsap.to(num, { color: 'var(--border)', duration: 0.25 }));
       });
 
-    });
+    }, this.identitySec?.nativeElement);
   }
 
   ngOnDestroy() {

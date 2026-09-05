@@ -1,1 +1,30 @@
-<p>header works!</p>
+<nav class="navbar" id="navbar" [class.scrolled]="isScrolled" [class.menu-open]="isMenuOpen">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <img src="assets/M SQUARE_Icon with background.png" alt="M Square Logo" class="brand-logo" width="40" height="40">
+      <span class="brand-text">MSQUARE</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" (click)="toggleMenu()">
+      <span [style.transform]="isMenuOpen ? 'rotate(45deg) translate(5px,5px)' : ''"></span>
+      <span [style.opacity]="isMenuOpen ? '0' : '1'"></span>
+      <span [style.transform]="isMenuOpen ? 'rotate(-45deg) translate(5px,-5px)' : ''"></span>
+    </button>
+    <ul class="nav-links" id="navMenu" [class.active]="isMenuOpen" role="menubar">
+      <li role="none">
+        <a href="#services" class="nav-link" [class.active]="activeSection === 'services'" (click)="closeMenu()" role="menuitem">Services</a>
+      </li>
+      <li role="none">
+        <a href="#internships" class="nav-link" [class.active]="activeSection === 'internships'" (click)="closeMenu()" role="menuitem">Internships</a>
+      </li>
+      <li role="none">
+        <a href="#events" class="nav-link" [class.active]="activeSection === 'events'" (click)="closeMenu()" role="menuitem">Events</a>
+      </li>
+      <li role="none">
+        <a href="#partners" class="nav-link" [class.active]="activeSection === 'partners'" (click)="closeMenu()" role="menuitem">Partners</a>
+      </li>
+      <li role="none">
+        <a href="#contact" class="nav-link nav-cta" [class.active]="activeSection === 'contact'" (click)="closeMenu()" role="menuitem">Contact</a>
+      </li>
+    </ul>
+  </div>
+</nav>

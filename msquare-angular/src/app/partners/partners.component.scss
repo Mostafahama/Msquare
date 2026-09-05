@@ -1,52 +1,150 @@
-/* ── PARTNERS ── */
+/* ── PARTNERS ─────────────────────────────────────────────────── */
 .partners {
-  padding: 90px 0;
-  min-height: 50vh;
-}
-
-.ptr-title {
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  text-align: center;
-  color: var(--navy);
-  margin-bottom: 36px;
-}
-
-.ptr-ticker {
+  padding: 100px 0 0;
+  background: var(--navy-deep);
   overflow: hidden;
 }
 
-.ticker-track {
+.partners-title {
+  font-size: var(--fs-h2);
+  color: var(--white);
+  margin-bottom: 12px;
+  margin-top: 8px;
+}
+
+.partners-sub {
+  font-size: var(--fs-body-lg);
+  color: rgba(255,255,255,0.6);
+  max-width: 540px;
+  line-height: var(--lh-body);
+  margin-bottom: 56px;
+}
+
+.partners .eyebrow {
+  color: var(--gold-light);
+  &::before { background: var(--gold-light); }
+}
+
+/* ── Marquee ─────────────────────────────────────────────────────
+   Pure CSS infinite marquee. Pause triggered by .paused class.
+   prefers-reduced-motion: animation-duration set to zero.
+────────────────────────────────────────────────────────────────── */
+.marquee-wrap {
+  position: relative;
+  padding: 32px 0;
+  overflow: hidden;
+
+  /* Fade edges — prevents hard cut at viewport boundary */
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, var(--navy-deep), transparent);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, var(--navy-deep), transparent);
+  }
+}
+
+.marquee-track {
   display: flex;
-  align-items: center;
-  gap: 36px;
-  animation: tick 20s linear infinite;
-  white-space: nowrap;
   width: max-content;
+  gap: 20px;
+  padding: 12px 0;
+  animation: marquee-left 40s linear infinite;
+
+  &.marquee-track-reverse {
+    animation: marquee-right 45s linear infinite;
+  }
+
+  &.paused { animation-play-state: paused; }
 }
 
-.ti {
-  font-family: var(--fd);
-  font-size: clamp(16px, 2.8vw, 28px);
-  font-weight: 700;
-  color: rgba(26, 26, 64, .1);
-  transition: color .3s;
-  padding: 8px 0;
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
-.ti:hover {
-  color: var(--navy);
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
 
-.td {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-  opacity: .3;
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .marquee-track.marquee-track-reverse {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ── Logo Tile ────────────────────────────────────────────────── */
+.logo-tile {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 28px;
+  min-width: 160px;
+  height: 88px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
+              box-shadow 0.3s var(--ease);
+  cursor: default;
+
+  img {
+    max-height: 40px;
+    max-width: 120px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1) brightness(1.8);
+    transition: filter 0.3s var(--ease);
+  }
+
+  &:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(184,134,11,0.4);
+    box-shadow: 0 4px 20px rgba(184,134,11,0.1);
+
+    img { filter: grayscale(0) brightness(1); }
+  }
 }
 
-@keyframes tick {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* Text badge (no-logo fallback) */
+.logo-abbr {
+  font-family: var(--fd);
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  color: rgba(255,255,255,0.7);
+  transition: color 0.3s var(--ease);
 }
+
+.logo-full-name {
+  font-family: var(--fb);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logo-tile:hover .logo-abbr { color: var(--gold-light); }
+.logo-tile:hover .logo-full-name { color: rgba(255,255,255,0.6); }

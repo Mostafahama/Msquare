@@ -1,15 +1,44 @@
 <section class="partners" id="partners">
   <div class="container">
-    <h2 class="ptr-title">Our Partners</h2>
-    <div class="ptr-ticker">
-      <div class="ticker-track">
-        <span class="ti">Pharmaceutical Industry Leaders</span><span class="td"></span>
-        <span class="ti">Medical Institutions</span><span class="td"></span>
-        <span class="ti">Healthcare Organizations</span><span class="td"></span>
-        <span class="ti">Academic Universities</span><span class="td"></span>
-        <span class="ti">Research Centers</span><span class="td"></span>
-        <span class="ti">Government Health Bodies</span><span class="td"></span>
-      </div>
+    <p class="eyebrow">Our Partners</p>
+    <h2 class="partners-title">Trusted By Leading<br>Healthcare Organizations</h2>
+    <p class="partners-sub">We collaborate with pharmaceutical companies, universities, professional medical societies, and industry bodies across Egypt.</p>
+  </div>
+
+  <!-- Logo wall: dual-row infinite CSS marquee. No JS scroll hijacking. -->
+  <div class="marquee-wrap"
+       (mouseenter)="pauseMarquee()"
+       (mouseleave)="resumeMarquee()"
+       (focusin)="pauseMarquee()"
+       (focusout)="resumeMarquee()">
+
+    <!-- Row 1 — scrolls left -->
+    <div class="marquee-track" [class.paused]="isPaused">
+      @for (partner of marqueeRow1; track $index) {
+        <div class="logo-tile">
+          @if (partner.logoPath) {
+            <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
+          } @else {
+            <span class="logo-abbr">{{ partner.abbr || partner.name }}</span>
+            <span class="logo-full-name">{{ partner.name }}</span>
+          }
+        </div>
+      }
     </div>
+
+    <!-- Row 2 — scrolls right (reverse direction) -->
+    <div class="marquee-track marquee-track-reverse" [class.paused]="isPaused">
+      @for (partner of marqueeRow2; track $index) {
+        <div class="logo-tile">
+          @if (partner.logoPath) {
+            <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
+          } @else {
+            <span class="logo-abbr">{{ partner.abbr || partner.name }}</span>
+            <span class="logo-full-name">{{ partner.name }}</span>
+          }
+        </div>
+      }
+    </div>
+
   </div>
 </section>

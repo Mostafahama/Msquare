@@ -38,49 +38,41 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   private ctx!: gsap.Context;
 
   ngAfterViewInit() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const inners = this.hwInners.toArray().map(el => el.nativeElement);
+
     this.ctx = gsap.context(() => {
-      const inners = this.hwInners.toArray().map(el => el.nativeElement);
-      
+      if (prefersReducedMotion) {
+        // Skip all animation — show final state immediately
+        gsap.set(inners, { yPercent: 0, rotation: 0 });
+        gsap.set(this.heroSub.nativeElement, { opacity: 0.9, y: 0 });
+        gsap.set(this.heroBgImg.nativeElement, { scale: 1 });
+        return;
+      }
+
       // Initial states
       gsap.set(inners, { yPercent: 120, rotation: 2 });
       gsap.set(this.heroSub.nativeElement, { opacity: 0, y: 20 });
 
       const heroTL = gsap.timeline({ defaults: { ease: 'power4.out' } });
-      
+
       // Background slow zoom out
       heroTL.to(this.heroBgImg.nativeElement, { scale: 1, duration: 4, ease: 'power2.out' }, 0);
 
-      // Text reveal
-      heroTL.to(inners, { yPercent: 0, rotation: 0, duration: 1.2, stagger: 0.15 }, 0.2)
-            .to(this.heroSub.nativeElement, { opacity: 0.9, y: 0, duration: 1.2, ease: 'power2.out' }, 0.8);
+      // Cinematic word-by-word reveal with letter-spacing settle-in
+      heroTL
+        .to(inners, { yPercent: 0, rotation: 0, duration: 1.2, stagger: 0.15 }, 0.2)
+        .to(this.heroSub.nativeElement, { opacity: 0.9, y: 0, duration: 1.2, ease: 'power2.out' }, 0.8);
 
-      // Parallax scroll effect
+      // Parallax scroll — content drifts up as hero leaves viewport
       gsap.to(this.heroContent.nativeElement, {
-        scrollTrigger: { 
-          trigger: this.heroSection.nativeElement, 
-          start: 'top top', 
-          end: 'bottom top', 
-          scrub: 1 
+        scrollTrigger: {
+          trigger: this.heroSection.nativeElement,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1
         },
         y: 80, opacity: 0.3, ease: 'none'
-      });
-
-      // Navbar visual transition logic based on hero scrolling
-      ScrollTrigger.create({
-        trigger: this.heroSection.nativeElement,
-        start: 'top top',
-        end: '60px top',
-        onLeave: () => {
-          // This ensures if there are global navbar tweens we can still trigger them, 
-          // but we handled navbar state natively in Angular @HostListener. 
-          // So this GSAP ScrollTrigger might be redundant, but keeping it for 1:1 migration.
-          const nav = document.querySelector('.navbar');
-          if (nav) gsap.to(nav, { background: 'rgba(255,255,255,0.98)', borderBottom: '1px solid #E8E8E8', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', padding: '6px 0', duration: 0.3 });
-        },
-        onEnterBack: () => {
-          const nav = document.querySelector('.navbar');
-          if (nav) gsap.to(nav, { background: 'transparent', borderBottom: '1px solid transparent', boxShadow: 'none', padding: '10px 0', duration: 0.3 });
-        }
       });
 
     }, this.heroSection.nativeElement);
