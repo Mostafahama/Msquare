@@ -1,11 +1,11 @@
 <section class="partners" id="partners">
   <div class="container">
     <p class="eyebrow">Our Partners</p>
-    <h2 class="partners-title" #ptTitle>Trusted By Leading<br><span class="gold-text">Healthcare Organizations</span></h2>
+    <h2 class="partners-title" #ptTitle>Trusted By Leading<br><span class="gold-text word-sweep">Healthcare Organizations</span></h2>
     <p class="partners-sub">We collaborate with pharmaceutical companies, universities, professional medical societies, and industry bodies across Egypt.</p>
   </div>
 
-  <!-- Logo wall: dual-row infinite CSS marquee. No JS scroll hijacking. -->
+  <!-- Logo wall: dual-row infinite CSS marquee with velocity reaction and tap-to-inspect -->
   <div class="marquee-wrap"
        (mouseenter)="pauseMarquee()"
        (mouseleave)="resumeMarquee()"
@@ -15,7 +15,13 @@
     <!-- Row 1 — scrolls left -->
     <div class="marquee-track" [class.paused]="isPaused">
       @for (partner of marqueeRow1; track $index) {
-        <div class="logo-tile">
+        <div class="logo-tile"
+             [class.is-active]="activePartner === partner.name"
+             (click)="selectPartner(partner.name)"
+             (keydown.enter)="selectPartner(partner.name)"
+             tabindex="0"
+             role="button"
+             [attr.aria-label]="partner.name">
           @if (partner.logoPath) {
             <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
           } @else {
@@ -29,7 +35,13 @@
     <!-- Row 2 — scrolls right (reverse direction) -->
     <div class="marquee-track marquee-track-reverse" [class.paused]="isPaused">
       @for (partner of marqueeRow2; track $index) {
-        <div class="logo-tile">
+        <div class="logo-tile"
+             [class.is-active]="activePartner === partner.name"
+             (click)="selectPartner(partner.name)"
+             (keydown.enter)="selectPartner(partner.name)"
+             tabindex="0"
+             role="button"
+             [attr.aria-label]="partner.name">
           @if (partner.logoPath) {
             <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
           } @else {

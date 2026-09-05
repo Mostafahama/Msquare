@@ -24,6 +24,7 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
 
   private ctx!: gsap.Context;
   isPaused = false;
+  activePartner: string | null = null;
 
   readonly partners: Partner[] = [
     // Pharmaceutical Companies
@@ -62,6 +63,10 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
   pauseMarquee() { this.isPaused = true; }
   resumeMarquee() { this.isPaused = false; }
 
+  selectPartner(name: string) {
+    this.activePartner = this.activePartner === name ? null : name;
+  }
+
   ngAfterViewInit() {
     const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -94,6 +99,23 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
           trigger: '.partners-sub',
           start: 'top 85%',
           toggleActions: 'play none none none',
+        }
+      });
+
+      // Subtle scroll velocity reaction on marquee tracks
+      ScrollTrigger.create({
+        trigger: '#partners',
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          const v = self.getVelocity();
+          const skew = gsap.utils.clamp(-3, 3, v / 500);
+          gsap.to('.marquee-track', {
+            skewX: skew,
+            duration: 0.35,
+            ease: 'power2.out',
+            overwrite: 'auto'
+          });
         }
       });
     });

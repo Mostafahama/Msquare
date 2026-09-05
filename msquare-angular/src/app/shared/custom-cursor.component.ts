@@ -114,6 +114,35 @@ import { gsap } from 'gsap';
       background: rgba(212, 168, 83, 0.15);
       box-shadow: 0 0 20px rgba(212, 168, 83, 0.45);
     }
+
+    /* State: Hover Interactive Service / Explore */
+    .cursor-outline.hover-explore {
+      width: 72px;
+      height: 72px;
+      background: var(--navy, #1A1A40);
+      border: 1.5px solid var(--gold, #d4a853);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+
+      .cursor-text {
+        opacity: 1;
+        color: var(--gold-light, #D4AF37);
+        transform: scale(1);
+      }
+    }
+
+    /* State: Hover Menu / Fullscreen Navigation */
+    .cursor-outline.hover-open {
+      width: 60px;
+      height: 60px;
+      background: rgba(212, 168, 83, 0.2);
+      border-color: var(--gold, #d4a853);
+
+      .cursor-text {
+        opacity: 1;
+        color: var(--white, #ffffff);
+        transform: scale(1);
+      }
+    }
   `]
 })
 export class CustomCursorComponent implements OnInit, OnDestroy {
@@ -170,28 +199,42 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
       const textEl = this.cursorText?.nativeElement;
 
       // Check for primary CTA
-      if (target.closest('.btn-primary, .nav-cta')) {
+      if (target.closest('.btn-primary, .nav-cta, .btn-magnetic')) {
         outEl.className = 'cursor-outline hover-primary';
         if (textEl) textEl.textContent = '';
         return;
       }
 
-      // Check for image gallery
-      if (target.closest('.mo-item, .ev-photo-wrap, .in-organic-wrap, .logo-tile')) {
+      // Check for Menu toggle
+      if (target.closest('.nav-menu-btn, .nav-toggle')) {
+        outEl.className = 'cursor-outline hover-open';
+        if (textEl) textEl.textContent = 'OPEN';
+        return;
+      }
+
+      // Check for interactive service explore item
+      if (target.closest('.sv-explore-item, .sv2-badge, .service-nav-item')) {
+        outEl.className = 'cursor-outline hover-explore';
+        if (textEl) textEl.textContent = 'EXPLORE';
+        return;
+      }
+
+      // Check for image gallery / events
+      if (target.closest('.mo-item, .ev-photo-stage, .ev-photo-wrap, .in-organic-wrap, .logo-tile')) {
         outEl.className = 'cursor-outline hover-image';
         if (textEl) textEl.textContent = 'VIEW';
         return;
       }
 
-      // Check for interactive timeline
-      if (target.closest('.timeline-node, .ev-timeline-card, .timeline-spine')) {
+      // Check for interactive timeline / gallery drag
+      if (target.closest('.timeline-node, .ev-timeline-card, .timeline-spine, .gallery-strip')) {
         outEl.className = 'cursor-outline hover-drag';
-        if (textEl) textEl.textContent = 'SCROLL';
+        if (textEl) textEl.textContent = 'DRAG';
         return;
       }
 
       // Check for generic link / button / interactive pill
-      if (target.closest('a, button, .pill-btn, .sv2-badge, .value-item')) {
+      if (target.closest('a, button, .pill-btn, .value-item, .val-tab-btn')) {
         outEl.className = 'cursor-outline hover-link';
         if (textEl) textEl.textContent = '';
         return;

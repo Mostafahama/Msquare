@@ -1,30 +1,99 @@
-<nav class="navbar" id="navbar" [class.scrolled]="isScrolled" [class.menu-open]="isMenuOpen">
+<header class="site-header" id="navbar" [class.scrolled]="isScrolled">
   <div class="nav-inner">
-    <a href="#" class="nav-brand">
-      <img src="assets/M SQUARE_Icon with background.png" alt="M Square Logo" class="brand-logo" width="40" height="40">
+    <!-- Brand Logo -->
+    <a href="#" class="nav-brand" (click)="navigateTo('hero', $event)">
+      <img src="assets/M SQUARE_Icon with background.png" alt="M Square Logo" class="brand-logo" width="38" height="38">
       <span class="brand-text">MSQUARE</span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" (click)="toggleMenu()">
-      <span [style.transform]="isMenuOpen ? 'rotate(45deg) translate(5px,5px)' : ''"></span>
-      <span [style.opacity]="isMenuOpen ? '0' : '1'"></span>
-      <span [style.transform]="isMenuOpen ? 'rotate(-45deg) translate(5px,-5px)' : ''"></span>
-    </button>
-    <ul class="nav-links" id="navMenu" [class.active]="isMenuOpen" role="menubar">
-      <li role="none">
-        <a href="#services" class="nav-link" [class.active]="activeSection === 'services'" (click)="closeMenu()" role="menuitem">Services</a>
-      </li>
-      <li role="none">
-        <a href="#internships" class="nav-link" [class.active]="activeSection === 'internships'" (click)="closeMenu()" role="menuitem">Internships</a>
-      </li>
-      <li role="none">
-        <a href="#events" class="nav-link" [class.active]="activeSection === 'events'" (click)="closeMenu()" role="menuitem">Events</a>
-      </li>
-      <li role="none">
-        <a href="#partners" class="nav-link" [class.active]="activeSection === 'partners'" (click)="closeMenu()" role="menuitem">Partners</a>
-      </li>
-      <li role="none">
-        <a href="#contact" class="nav-link nav-cta btn-magnetic" [class.active]="activeSection === 'contact'" (click)="closeMenu()" role="menuitem" appMagnetic>Contact</a>
-      </li>
-    </ul>
+
+    <!-- Desktop Minimal Quick Links & Actions -->
+    <div class="nav-actions">
+      <ul class="nav-desktop-links" role="menubar">
+        <li role="none"><a href="#about" class="nav-underline-link" (click)="navigateTo('about', $event)">Identity</a></li>
+        <li role="none"><a href="#services" class="nav-underline-link" (click)="navigateTo('services', $event)">Services</a></li>
+        <li role="none"><a href="#events" class="nav-underline-link" (click)="navigateTo('events', $event)">Portfolio</a></li>
+        <li role="none"><a href="#partners" class="nav-underline-link" (click)="navigateTo('partners', $event)">Partners</a></li>
+      </ul>
+
+      <!-- CTA Button -->
+      <a href="#contact" class="btn btn-primary nav-cta btn-magnetic" (click)="navigateTo('contact', $event)" appMagnetic>
+        <span>Partner With Us</span>
+      </a>
+
+      <!-- Minimal MENU Trigger Button -->
+      <button class="nav-menu-btn" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" aria-label="Toggle Fullscreen Menu">
+        <span class="menu-btn-label">{{ isMenuOpen ? 'CLOSE' : 'MENU' }}</span>
+        <div class="menu-icon-bars" [class.is-open]="isMenuOpen">
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+        </div>
+      </button>
+    </div>
   </div>
-</nav>
+</header>
+
+<!-- ═══ FULLSCREEN CINEMATIC NAVIGATION OVERLAY ═══ -->
+<div class="fs-menu-overlay" #menuOverlay [class.is-active]="isMenuOpen">
+  <div class="fs-menu-backdrop" (click)="closeMenu()"></div>
+
+  <div class="fs-menu-content">
+    <div class="fs-menu-header">
+      <div class="fs-menu-brand">
+        <img src="assets/M SQUARE_Icon with background.png" alt="M Square" class="fs-logo" width="32" height="32">
+        <span class="fs-brand-name">MSQUARE</span>
+      </div>
+      <button class="fs-close-btn" (click)="closeMenu()" aria-label="Close navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Main Navigation Items -->
+    <nav class="fs-nav-list" role="navigation">
+      <a href="#about" class="fs-nav-item" (click)="navigateTo('about', $event)">
+        <span class="fs-item-num">01</span>
+        <span class="fs-item-text">Identity &amp; Purpose</span>
+        <span class="fs-item-sub">Manifesto &amp; Values</span>
+      </a>
+      <a href="#services" class="fs-nav-item" (click)="navigateTo('services', $event)">
+        <span class="fs-item-num">02</span>
+        <span class="fs-item-text">Healthcare Services</span>
+        <span class="fs-item-sub">12 Specialized Solutions</span>
+      </a>
+      <a href="#events" class="fs-nav-item" (click)="navigateTo('events', $event)">
+        <span class="fs-item-num">03</span>
+        <span class="fs-item-text">Featured Portfolio</span>
+        <span class="fs-item-sub">Congresses &amp; Forums</span>
+      </a>
+      <a href="#partners" class="fs-nav-item" (click)="navigateTo('partners', $event)">
+        <span class="fs-item-num">04</span>
+        <span class="fs-item-text">Academic &amp; Industry</span>
+        <span class="fs-item-sub">Multinationals &amp; Universities</span>
+      </a>
+      <a href="#contact" class="fs-nav-item" (click)="navigateTo('contact', $event)">
+        <span class="fs-item-num">05</span>
+        <span class="fs-item-text">Contact &amp; Headquarters</span>
+        <span class="fs-item-sub">Cairo AlQattamia District</span>
+      </a>
+    </nav>
+
+    <!-- Bottom Contact & Meta Row -->
+    <div class="fs-menu-footer">
+      <div class="fs-meta-col">
+        <span class="fs-meta-label">DIRECT INQUIRIES</span>
+        <a href="mailto:admin@mtechsquare.com" class="fs-meta-val">admin&#64;mtechsquare.com</a>
+      </div>
+      <div class="fs-meta-col">
+        <span class="fs-meta-label">TELEPHONE</span>
+        <a href="tel:+201002906884" class="fs-meta-val">+20 100 290 6884</a>
+      </div>
+      <div class="fs-meta-col">
+        <span class="fs-meta-label">LOCATION</span>
+        <span class="fs-meta-val">Cairo, Egypt — AlQattamia 36 AlMarwa</span>
+      </div>
+    </div>
+  </div>
+</div>
+

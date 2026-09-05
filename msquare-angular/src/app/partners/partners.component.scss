@@ -96,16 +96,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 20px 28px;
-  min-width: 160px;
-  height: 88px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  gap: 6px;
+  padding: 18px 24px;
+  min-width: 170px;
+  height: 92px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
-              box-shadow 0.3s var(--ease);
-  cursor: default;
+              box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+  cursor: pointer;
+  user-select: none;
 
   img {
     max-height: 40px;
@@ -116,12 +117,16 @@
     transition: filter 0.3s var(--ease);
   }
 
-  &:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(184,134,11,0.4);
-    box-shadow: 0 4px 20px rgba(184,134,11,0.1);
+  &:hover,
+  &.is-active {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(184,134,11,0.5);
+    box-shadow: 0 8px 24px rgba(184,134,11,0.18);
+    transform: translateY(-3px) scale(1.03);
 
     img { filter: grayscale(0) brightness(1); }
+    .logo-abbr { color: var(--gold-light); }
+    .logo-full-name { color: rgba(255,255,255,0.85); font-weight: 500; }
   }
 }
 
