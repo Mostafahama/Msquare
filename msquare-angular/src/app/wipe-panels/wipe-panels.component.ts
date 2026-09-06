@@ -329,6 +329,42 @@ export class WipePanelsComponent implements AfterViewInit, OnDestroy {
     this.triggerStageTransition();
   }
 
+  prevItem() {
+    const len = this.currentItems.length;
+    const newIdx = (this.activeIndex - 1 + len) % len;
+    this.selectItem(newIdx);
+  }
+
+  nextItem() {
+    const len = this.currentItems.length;
+    const newIdx = (this.activeIndex + 1) % len;
+    this.selectItem(newIdx);
+  }
+
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  onTouchStart(e: TouchEvent) {
+    if (e.touches && e.touches.length > 0) {
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+    }
+  }
+
+  onTouchEnd(e: TouchEvent) {
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      const diffX = e.changedTouches[0].clientX - this.touchStartX;
+      const diffY = e.changedTouches[0].clientY - this.touchStartY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+        if (diffX < 0) {
+          this.nextItem();
+        } else {
+          this.prevItem();
+        }
+      }
+    }
+  }
+
   private triggerStageTransition() {
     const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion || !this.stageVisual?.nativeElement) return;

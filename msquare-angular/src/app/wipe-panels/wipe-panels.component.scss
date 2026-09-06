@@ -377,15 +377,34 @@
   }
 }
 
+/* ── Mobile Quick-Select Horizontal Chips (Desktop Hidden) ── */
+.mobile-explorer-nav {
+  display: none;
+}
+
+.stage-mobile-nav {
+  display: none;
+}
+
 /* ── Responsive Flow ── */
 @media (max-width: 991px) {
   .capabilities-explorer {
-    padding: 80px 0 100px;
+    padding: 70px 0 90px;
+  }
+
+  .explorer-header {
+    margin-bottom: 24px;
+    gap: 18px;
+  }
+
+  /* Hide the 400px vertical list on mobile, use horizontal quick-nav instead */
+  .sv-explorer-list {
+    display: none;
   }
 
   .explorer-body {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 0;
   }
 
   .sv-stage-col {
@@ -393,24 +412,128 @@
     top: 0;
   }
 
-  .sv-explorer-list {
-    max-height: 380px;
+  .stage-media-wrap {
+    height: 240px;
+  }
+
+  /* Show mobile horizontal chip bar */
+  .mobile-explorer-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .mob-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.75);
+      white-space: nowrap;
+      font-family: var(--fd);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s var(--ease);
+
+      .mob-chip-num {
+        font-weight: 700;
+        color: rgba(212, 168, 83, 0.8);
+      }
+
+      &.active {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--navy-deep);
+        box-shadow: 0 4px 14px rgba(212, 168, 83, 0.35);
+
+        .mob-chip-num {
+          color: var(--navy-deep);
+        }
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
+    }
+  }
+
+  /* Show mobile navigation arrows over the stage photo */
+  .stage-mobile-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    inset: 0 12px;
+    z-index: 5;
+    pointer-events: none;
+
+    .stage-arrow-btn {
+      pointer-events: auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+
+      &:active {
+        background: var(--gold);
+        color: var(--navy-deep);
+        transform: scale(0.92);
+      }
+    }
   }
 }
 
 @media (max-width: 600px) {
   .mode-switcher-wrap {
-    flex-direction: column;
-    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    border-radius: 100px;
     width: 100%;
+    padding: 4px;
   }
 
   .mode-switch-btn {
     width: 100%;
     justify-content: center;
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    gap: 6px;
+
+    .mode-icon svg {
+      width: 15px;
+      height: 15px;
+    }
   }
 
   .stage-content-box {
-    padding: 20px;
+    padding: 20px 18px;
+    gap: 12px;
+  }
+
+  .stage-active-title {
+    font-size: 1.35rem;
+  }
+
+  .stage-active-desc {
+    font-size: 0.9rem;
   }
 }

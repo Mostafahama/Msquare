@@ -40,11 +40,25 @@
     </div>
 
     <!-- ═══ DOMINANT CINEMATIC GALLERY STAGE ═══ -->
+    <!-- Mobile Horizontal Event Selector Strip (Hidden on Desktop) -->
+    <div class="mobile-event-nav" role="tablist" aria-label="Quick select event">
+      @for (ev of filteredEvents; track ev.id; let idx = $index) {
+        <button
+          type="button"
+          class="mob-event-btn"
+          [class.active]="activeEventIndex === idx"
+          (click)="selectEvent(idx)">
+          <span class="mob-event-num">0{{ idx + 1 }}</span>
+          <span class="mob-event-title">{{ ev.title }}</span>
+        </button>
+      }
+    </div>
+
     <div class="cinematic-events-stage" #cinematicStage>
 
       <!-- Main Photo Showcase with Diagonal Wipe -->
       <div class="cin-photo-canvas">
-        <div class="cin-media-viewport">
+        <div class="cin-media-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
           <img class="cin-base-img" [src]="previousImage" alt="" loading="lazy" decoding="async">
           <img class="cin-top-img" [src]="currentImage" [alt]="activeEvent.title" loading="lazy" decoding="async">
           <div class="cin-vignette-overlay"></div>

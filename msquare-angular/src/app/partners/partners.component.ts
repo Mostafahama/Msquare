@@ -53,11 +53,12 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
   ];
 
   get marqueeRow1(): Partner[] {
-    return [...this.partners.slice(0, 10), ...this.partners.slice(0, 10)];
+    return [...this.partners, ...this.partners];
   }
 
   get marqueeRow2(): Partner[] {
-    return [...this.partners.slice(9), ...this.partners.slice(9)];
+    const reversed = [...this.partners].reverse();
+    return [...reversed, ...reversed];
   }
 
   pauseMarquee() { this.isPaused = true; }

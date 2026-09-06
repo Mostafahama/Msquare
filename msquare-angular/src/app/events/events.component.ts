@@ -246,6 +246,30 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     this.selectEvent(prevIdx);
   }
 
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  onTouchStart(e: TouchEvent) {
+    if (e.touches && e.touches.length > 0) {
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+    }
+  }
+
+  onTouchEnd(e: TouchEvent) {
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      const diffX = e.changedTouches[0].clientX - this.touchStartX;
+      const diffY = e.changedTouches[0].clientY - this.touchStartY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+        if (diffX < 0) {
+          this.nextEvent();
+        } else {
+          this.prevEvent();
+        }
+      }
+    }
+  }
+
   /**
    * Signature Diagonal-Wipe Image Transition Motif (~25° polygon sweep)
    */

@@ -151,5 +151,44 @@
 }
 
 @media (max-width: 768px) {
-  .identity { padding: 72px 0; }
+  .identity { padding: 70px 0; }
+  .values-wrap { padding-top: 40px; }
+
+  .value-item {
+    padding: 20px 14px;
+    gap: 16px;
+
+    .val-num {
+      font-size: 26px;
+      min-width: 34px;
+      color: var(--border);
+      transition: color 0.3s var(--ease), transform 0.3s var(--ease), text-shadow 0.3s var(--ease);
+    }
+
+    .val-body h3 {
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      transition: color 0.3s var(--ease);
+    }
+
+    .val-body p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    &.val-active {
+      background: rgba(212, 168, 83, 0.04);
+      transform: translateX(6px);
+
+      .val-num {
+        color: var(--gold) !important;
+        text-shadow: 0 0 14px rgba(212, 168, 83, 0.5);
+        transform: scale(1.15);
+      }
+
+      .val-body h3 {
+        color: var(--navy);
+      }
+    }
+  }
 }

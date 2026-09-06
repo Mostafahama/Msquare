@@ -153,3 +153,57 @@
 
 .logo-tile:hover .logo-abbr { color: var(--gold-light); }
 .logo-tile:hover .logo-full-name { color: rgba(255,255,255,0.6); }
+
+/* ── Mobile Responsive Marquee ── */
+@media (max-width: 768px) {
+  .partners {
+    padding: 70px 0 0;
+  }
+
+  .partners-sub {
+    font-size: 0.92rem;
+    margin-bottom: 32px;
+  }
+
+  .marquee-wrap {
+    padding: 16px 0;
+
+    &::before,
+    &::after {
+      width: 40px;
+    }
+  }
+
+  .marquee-track {
+    gap: 10px;
+    padding: 6px 0;
+    animation-duration: 28s;
+
+    &.marquee-track-reverse {
+      animation-duration: 32s;
+    }
+  }
+
+  .logo-tile {
+    min-width: 105px;
+    height: 60px;
+    padding: 8px 10px;
+    gap: 2px;
+    border-radius: 8px;
+
+    img {
+      max-height: 26px;
+      max-width: 75px;
+    }
+
+    .logo-abbr {
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-full-name {
+      font-size: 0.56rem;
+      max-width: 90px;
+    }
+  }
+}

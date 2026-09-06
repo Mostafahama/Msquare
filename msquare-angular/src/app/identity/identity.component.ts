@@ -99,10 +99,33 @@ export class IdentityComponent implements AfterViewInit, OnDestroy {
       });
 
       mm.add('(max-width: 1023px)', () => {
-        // Mobile fallback: simple static presentation
+        // Storytelling moment 2 on mobile: Values spine fills downward as user scrolls through values
         if (this.valuesSpineFill?.nativeElement) {
-          gsap.set(this.valuesSpineFill.nativeElement, { scaleY: 1 });
+          gsap.fromTo(this.valuesSpineFill.nativeElement,
+            { scaleY: 0 },
+            {
+              scaleY: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '.values-grid',
+                start: 'top 75%',
+                end: 'bottom 50%',
+                scrub: 1,
+              }
+            }
+          );
         }
+
+        // Active state toggles on each value item as it passes center of mobile screen
+        const items = this.valueItems.toArray().map(r => r.nativeElement);
+        items.forEach(item => {
+          ScrollTrigger.create({
+            trigger: item,
+            start: 'top 65%',
+            end: 'bottom 35%',
+            toggleClass: 'val-active',
+          });
+        });
       });
 
       // Value items initial entrance stagger

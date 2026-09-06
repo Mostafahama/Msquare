@@ -133,6 +133,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ── 5. LAYOUT ─────────────────────────────────────────────────── */
 .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+section[id] { scroll-margin-top: 100px; }
 
 /* ── 6. SELECTION & SCROLLBAR ──────────────────────────────────── */
 ::selection { background: var(--gold-light); color: var(--navy); }

@@ -313,23 +313,131 @@
   }
 }
 
+/* ── Mobile Horizontal Event Selector Strip (Desktop Hidden) ── */
+.mobile-event-nav {
+  display: none;
+}
+
 /* ── Responsive Flow ── */
 @media (max-width: 991px) {
   .events-cinematic {
-    padding: 80px 0 100px;
+    padding: 70px 0 90px;
+  }
+
+  .events-cin-header {
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+
+  .filter-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .pill-btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding: 9px 18px;
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Show mobile quick event selector */
+  .mobile-event-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .mob-event-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: rgba(26, 26, 64, 0.04);
+      border: 1px solid var(--border);
+      color: var(--navy);
+      white-space: nowrap;
+      font-family: var(--fd);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s var(--ease);
+
+      .mob-event-num {
+        font-weight: 700;
+        color: var(--gold);
+      }
+
+      &.active {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: var(--white);
+        box-shadow: 0 4px 12px rgba(26, 26, 64, 0.2);
+
+        .mob-event-num {
+          color: var(--gold-light);
+        }
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
+    }
   }
 
   .cinematic-events-stage {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 20px;
   }
 
   .cin-media-viewport {
-    height: 280px;
+    height: 260px;
+  }
+
+  /* Hide the duplicate bottom rail on mobile */
+  .cin-event-rail {
+    display: none;
   }
 
   .cin-meta-panel {
-    padding: 24px;
+    padding: 20px 18px;
+    gap: 12px;
+  }
+
+  .cin-event-title {
+    font-size: 1.35rem;
+  }
+
+  .cin-event-desc {
+    font-size: 0.9rem;
+  }
+
+  .cin-thumb-strip {
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .cin-thumb-btn {
+      width: 58px;
+      height: 42px;
+      flex-shrink: 0;
+    }
   }
 }
 
