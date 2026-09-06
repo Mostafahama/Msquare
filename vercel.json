@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd msquare-angular && npm install && npm run build",
+  "outputDirectory": "msquare-angular/dist/msquare-angular/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
