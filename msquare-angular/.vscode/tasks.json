@@ -15,7 +15,7 @@
             "regexp": "(.*?)"
           },
           "endsPattern": {
-            "regexp": "bundle generation complete"
+            "regexp": "(Application bundle generation complete|bundle generation complete|Watching for file changes|Compiled successfully)"
           }
         }
       }
@@ -33,7 +33,7 @@
             "regexp": "(.*?)"
           },
           "endsPattern": {
-            "regexp": "bundle generation complete"
+            "regexp": "(Executed \\d+ of \\d+|Application bundle generation complete|bundle generation complete)"
           }
         }
       }

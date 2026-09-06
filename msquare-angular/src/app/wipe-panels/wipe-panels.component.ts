@@ -399,35 +399,47 @@ export class WipePanelsComponent implements AfterViewInit, OnDestroy {
     this.ctx = gsap.context(() => {
       if (prefersReducedMotion) return;
 
-      // Section title reveal
+      // Section title reveal safely
       if (this.secTitle?.nativeElement) {
-        const split = new SplitText(this.secTitle.nativeElement, { type: 'lines', mask: 'lines' });
-        gsap.from(split.lines, {
-          yPercent: 110,
-          duration: 0.85,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: this.secTitle.nativeElement,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
+        gsap.fromTo(this.secTitle.nativeElement,
+          { y: 25, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: this.secTitle.nativeElement,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: true
+            },
+            clearProps: 'all'
           }
-        });
+        );
       }
 
-      // Stagger in selector list items on initial entrance
-      gsap.from('.sv-explore-item', {
-        y: 20,
-        opacity: 0,
-        stagger: 0.04,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.sv-explorer-list',
-          start: 'top 82%',
-          toggleActions: 'play none none none'
-        }
-      });
+      // Stagger in selector list items on initial entrance safely
+      const listItems = this.explorerSec?.nativeElement.querySelectorAll('.sv-explore-item');
+      if (listItems && listItems.length > 0) {
+        gsap.fromTo(listItems,
+          { y: 15, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: this.explorerSec.nativeElement,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              once: true
+            },
+            clearProps: 'all'
+          }
+        );
+      }
     }, this.explorerSec?.nativeElement ?? undefined);
   }
 
