@@ -1,18 +1,16 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
 
 @Component({
   selector: 'app-hero',
   standalone: true,
   imports: [CommonModule, MagneticButtonDirective, DrawSvgButtonDirective],
   templateUrl: './hero.component.html',
-  styleUrls: ['./hero.component.scss']
+  styleUrls: ['./hero.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
   @ViewChild('heroSection') heroSection!: ElementRef<HTMLElement>;
@@ -27,10 +25,13 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
 
   private ctx!: gsap.Context;
 
-  ngAfterViewInit() {
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  constructor(private ngZone: NgZone) {}
 
-    this.ctx = gsap.context(() => {
+  ngAfterViewInit() {
+    this.ngZone.runOutsideAngular(() => {
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      this.ctx = gsap.context(() => {
       if (prefersReducedMotion) {
         gsap.set(this.heroContent.nativeElement, { opacity: 1, y: 0 });
         gsap.set(this.heroSub.nativeElement, { opacity: 0.92, y: 0, filter: 'blur(0px)' });
@@ -151,6 +152,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
       });
 
     }, this.heroSection.nativeElement);
+    });
   }
 
   ngOnDestroy() {

@@ -50,55 +50,15 @@
         </div>
 
         <div class="values-grid">
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">01</span>
-            <div class="val-body">
-              <h3>Excellence</h3>
-              <p>Top-quality, detail-driven events that exceed expectations every time.</p>
+          @for (item of values; track item.num) {
+            <div class="value-item" #valueItem>
+              <span class="val-num">{{ item.num }}</span>
+              <div class="val-body">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+              </div>
             </div>
-          </div>
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">02</span>
-            <div class="val-body">
-              <h3>Integrity</h3>
-              <p>Honesty and full transparency in every relationship and decision.</p>
-            </div>
-          </div>
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">03</span>
-            <div class="val-body">
-              <h3>Innovation</h3>
-              <p>Fresh ideas and smart technology applied to healthcare event design.</p>
-            </div>
-          </div>
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">04</span>
-            <div class="val-body">
-              <h3>Collaboration</h3>
-              <p>Stronger outcomes through meaningful partnerships and real teamwork.</p>
-            </div>
-          </div>
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">05</span>
-            <div class="val-body">
-              <h3>Impact</h3>
-              <p>Making a measurable difference in the healthcare and pharma industries.</p>
-            </div>
-          </div>
-
-          <div class="value-item" #valueItem>
-            <span class="val-num">06</span>
-            <div class="val-body">
-              <h3>Lifelong Learning</h3>
-              <p>We support continuous growth and knowledge sharing at every career stage.</p>
-            </div>
-          </div>
-
+          }
         </div>
       </div>
     </div>

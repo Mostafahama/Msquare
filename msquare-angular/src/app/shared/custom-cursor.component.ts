@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 
@@ -143,7 +143,8 @@ import { gsap } from 'gsap';
         transform: scale(1);
       }
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomCursorComponent implements OnInit, OnDestroy {
   @ViewChild('dot') dot!: ElementRef<HTMLElement>;
@@ -159,6 +160,11 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
   private mouseMoveListener: ((e: MouseEvent) => void) | null = null;
   private mouseOverListener: ((e: MouseEvent) => void) | null = null;
 
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   ngOnInit() {
     if (typeof window === 'undefined') return;
 
@@ -168,6 +174,7 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
 
     if (isFinePointer && isDesktop && !prefersReducedMotion) {
       this.isEnabled = true;
+      this.cdr.markForCheck();
       setTimeout(() => this.setupCursor(), 10);
     }
   }
@@ -175,77 +182,79 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
   private setupCursor() {
     if (!this.dot || !this.outline) return;
 
-    this.xToDot = gsap.quickTo(this.dot.nativeElement, 'x', { duration: 0.1, ease: 'power3.out' });
-    this.yToDot = gsap.quickTo(this.dot.nativeElement, 'y', { duration: 0.1, ease: 'power3.out' });
+    this.ngZone.runOutsideAngular(() => {
+      this.xToDot = gsap.quickTo(this.dot.nativeElement, 'x', { duration: 0.1, ease: 'power3.out' });
+      this.yToDot = gsap.quickTo(this.dot.nativeElement, 'y', { duration: 0.1, ease: 'power3.out' });
 
-    this.xToOutline = gsap.quickTo(this.outline.nativeElement, 'x', { duration: 0.25, ease: 'power3.out' });
-    this.yToOutline = gsap.quickTo(this.outline.nativeElement, 'y', { duration: 0.25, ease: 'power3.out' });
+      this.xToOutline = gsap.quickTo(this.outline.nativeElement, 'x', { duration: 0.25, ease: 'power3.out' });
+      this.yToOutline = gsap.quickTo(this.outline.nativeElement, 'y', { duration: 0.25, ease: 'power3.out' });
 
-    // Track mouse position
-    this.mouseMoveListener = (e: MouseEvent) => {
-      this.xToDot(e.clientX);
-      this.yToDot(e.clientY);
-      this.xToOutline(e.clientX);
-      this.yToOutline(e.clientY);
-    };
-    window.addEventListener('mousemove', this.mouseMoveListener, { passive: true });
+      // Track mouse position outside Angular zone to eliminate tick overhead
+      this.mouseMoveListener = (e: MouseEvent) => {
+        this.xToDot(e.clientX);
+        this.yToDot(e.clientY);
+        this.xToOutline(e.clientX);
+        this.yToOutline(e.clientY);
+      };
+      window.addEventListener('mousemove', this.mouseMoveListener, { passive: true });
 
-    // Track hover targets
-    this.mouseOverListener = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target || !this.outline) return;
+      // Track hover targets outside Angular zone
+      this.mouseOverListener = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target || !this.outline) return;
 
-      const outEl = this.outline.nativeElement;
-      const textEl = this.cursorText?.nativeElement;
+        const outEl = this.outline.nativeElement;
+        const textEl = this.cursorText?.nativeElement;
 
-      // Check for primary CTA
-      if (target.closest('.btn-primary, .nav-cta, .btn-magnetic')) {
-        outEl.className = 'cursor-outline hover-primary';
+        // Check for primary CTA
+        if (target.closest('.btn-primary, .nav-cta, .btn-magnetic')) {
+          outEl.className = 'cursor-outline hover-primary';
+          if (textEl) textEl.textContent = '';
+          return;
+        }
+
+        // Check for Menu toggle
+        if (target.closest('.nav-menu-btn, .nav-toggle')) {
+          outEl.className = 'cursor-outline hover-open';
+          if (textEl) textEl.textContent = 'OPEN';
+          return;
+        }
+
+        // Check for interactive service explore item
+        if (target.closest('.sv-explore-item, .stage-metric-badge, .service-nav-item')) {
+          outEl.className = 'cursor-outline hover-explore';
+          if (textEl) textEl.textContent = 'EXPLORE';
+          return;
+        }
+
+        // Check for image gallery / events
+        if (target.closest('.mo-item, .ev-photo-stage, .ev-photo-wrap, .in-organic-wrap, .logo-tile')) {
+          outEl.className = 'cursor-outline hover-image';
+          if (textEl) textEl.textContent = 'VIEW';
+          return;
+        }
+
+        // Check for interactive timeline / gallery drag
+        if (target.closest('.timeline-node, .ev-timeline-card, .timeline-spine, .gallery-strip')) {
+          outEl.className = 'cursor-outline hover-drag';
+          if (textEl) textEl.textContent = 'DRAG';
+          return;
+        }
+
+        // Check for generic link / button / interactive pill
+        if (target.closest('a, button, .pill-btn, .value-item, .val-tab-btn')) {
+          outEl.className = 'cursor-outline hover-link';
+          if (textEl) textEl.textContent = '';
+          return;
+        }
+
+        // Resting state
+        outEl.className = 'cursor-outline';
         if (textEl) textEl.textContent = '';
-        return;
-      }
+      };
 
-      // Check for Menu toggle
-      if (target.closest('.nav-menu-btn, .nav-toggle')) {
-        outEl.className = 'cursor-outline hover-open';
-        if (textEl) textEl.textContent = 'OPEN';
-        return;
-      }
-
-      // Check for interactive service explore item
-      if (target.closest('.sv-explore-item, .sv2-badge, .service-nav-item')) {
-        outEl.className = 'cursor-outline hover-explore';
-        if (textEl) textEl.textContent = 'EXPLORE';
-        return;
-      }
-
-      // Check for image gallery / events
-      if (target.closest('.mo-item, .ev-photo-stage, .ev-photo-wrap, .in-organic-wrap, .logo-tile')) {
-        outEl.className = 'cursor-outline hover-image';
-        if (textEl) textEl.textContent = 'VIEW';
-        return;
-      }
-
-      // Check for interactive timeline / gallery drag
-      if (target.closest('.timeline-node, .ev-timeline-card, .timeline-spine, .gallery-strip')) {
-        outEl.className = 'cursor-outline hover-drag';
-        if (textEl) textEl.textContent = 'DRAG';
-        return;
-      }
-
-      // Check for generic link / button / interactive pill
-      if (target.closest('a, button, .pill-btn, .value-item, .val-tab-btn')) {
-        outEl.className = 'cursor-outline hover-link';
-        if (textEl) textEl.textContent = '';
-        return;
-      }
-
-      // Resting state
-      outEl.className = 'cursor-outline';
-      if (textEl) textEl.textContent = '';
-    };
-
-    document.addEventListener('mouseover', this.mouseOverListener, { passive: true });
+      document.addEventListener('mouseover', this.mouseOverListener, { passive: true });
+    });
   }
 
   ngOnDestroy() {

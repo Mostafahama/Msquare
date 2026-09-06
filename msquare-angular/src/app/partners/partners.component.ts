@@ -1,10 +1,8 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export interface Partner {
   name: string;
@@ -17,7 +15,8 @@ export interface Partner {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './partners.component.html',
-  styleUrls: ['./partners.component.scss']
+  styleUrls: ['./partners.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartnersComponent implements AfterViewInit, OnDestroy {
   @ViewChild('ptTitle') ptTitle!: ElementRef<HTMLElement>;
@@ -61,63 +60,78 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
     return [...reversed, ...reversed];
   }
 
-  pauseMarquee() { this.isPaused = true; }
-  resumeMarquee() { this.isPaused = false; }
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  pauseMarquee() {
+    this.isPaused = true;
+    this.cdr.markForCheck();
+  }
+
+  resumeMarquee() {
+    this.isPaused = false;
+    this.cdr.markForCheck();
+  }
 
   selectPartner(name: string) {
     this.activePartner = this.activePartner === name ? null : name;
+    this.cdr.markForCheck();
   }
 
   ngAfterViewInit() {
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ngZone.runOutsideAngular(() => {
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    this.ctx = gsap.context(() => {
-      if (prefersReducedMotion) return;
+      this.ctx = gsap.context(() => {
+        if (prefersReducedMotion) return;
 
-      // ── Font Effect (a): SplitText line reveal on Partners heading
-      if (this.ptTitle?.nativeElement) {
-        const splitPt = new SplitText(this.ptTitle.nativeElement, { type: 'lines', mask: 'lines' });
-        gsap.from(splitPt.lines, {
-          yPercent: 110,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: 'power3.out',
+        // ── Font Effect (a): SplitText line reveal on Partners heading
+        if (this.ptTitle?.nativeElement) {
+          const splitPt = new SplitText(this.ptTitle.nativeElement, { type: 'lines', mask: 'lines' });
+          gsap.from(splitPt.lines, {
+            yPercent: 110,
+            duration: 0.9,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: this.ptTitle.nativeElement,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            }
+          });
+        }
+
+        // Subtitle fade-up
+        gsap.from('.partners-sub', {
+          y: 20,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.out',
           scrollTrigger: {
-            trigger: this.ptTitle.nativeElement,
+            trigger: '.partners-sub',
             start: 'top 85%',
             toggleActions: 'play none none none',
           }
         });
-      }
 
-      // Subtitle fade-up
-      gsap.from('.partners-sub', {
-        y: 20,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.partners-sub',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
-
-      // Subtle scroll velocity reaction on marquee tracks
-      ScrollTrigger.create({
-        trigger: '#partners',
-        start: 'top bottom',
-        end: 'bottom top',
-        onUpdate: (self) => {
-          const v = self.getVelocity();
-          const skew = gsap.utils.clamp(-3, 3, v / 500);
-          gsap.to('.marquee-track', {
-            skewX: skew,
-            duration: 0.35,
-            ease: 'power2.out',
-            overwrite: 'auto'
-          });
-        }
+        // Subtle scroll velocity reaction on marquee tracks
+        ScrollTrigger.create({
+          trigger: '#partners',
+          start: 'top bottom',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            const v = self.getVelocity();
+            const skew = gsap.utils.clamp(-3, 3, v / 500);
+            gsap.to('.marquee-track', {
+              skewX: skew,
+              duration: 0.35,
+              ease: 'power2.out',
+              overwrite: 'auto'
+            });
+          }
+        });
       });
     });
   }

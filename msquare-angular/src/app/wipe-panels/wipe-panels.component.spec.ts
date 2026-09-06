@@ -20,4 +20,14 @@ describe('WipePanelsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should default to services mode', () => {
+    expect(component.activeMode).toBe('services');
+  });
+
+  it('should switch mode to internships when setMode is called', () => {
+    component.setMode('internships');
+    expect(component.activeMode).toBe('internships');
+  });
 });
+

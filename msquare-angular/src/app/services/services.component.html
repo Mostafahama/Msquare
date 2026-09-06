@@ -1,0 +1,109 @@
+<!-- Mobile Quick-Select Horizontal Chips (Desktop Hidden) -->
+<div class="mobile-explorer-nav" role="tablist" aria-label="Quick select service">
+  @for (item of items; track item.id; let idx = $index) {
+    <button
+      type="button"
+      class="mob-chip-btn"
+      [class.active]="activeIndex === idx"
+      (click)="selectItem(idx)">
+      <span class="mob-chip-num">{{ item.num }}</span>
+      <span class="mob-chip-title">{{ item.title }}</span>
+    </button>
+  }
+</div>
+
+<div class="explorer-body">
+
+  <!-- Left Column: Indexed Navigation (01 to 12) (Desktop only) -->
+  <div class="sv-explorer-list" role="tablist" aria-orientation="vertical">
+    @for (item of items; track item.id; let idx = $index) {
+      <div
+        class="sv-explore-item"
+        role="tab"
+        [class.is-active]="activeIndex === idx"
+        [attr.aria-selected]="activeIndex === idx"
+        (mouseenter)="selectItem(idx)"
+        (click)="selectItem(idx)">
+        <span class="sv-item-num">{{ item.num }}</span>
+        <div class="sv-item-info">
+          <h4 class="sv-item-title">{{ item.title }}</h4>
+          <span class="sv-item-cat">{{ item.category }}</span>
+        </div>
+        <span class="sv-item-chevron" aria-hidden="true">&rarr;</span>
+      </div>
+    }
+  </div>
+
+  <!-- Right Column: Shared Cinematic Visual Stage -->
+  <div class="sv-stage-col" #stageVisual>
+    <div class="sv-stage-card" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+
+      <!-- Dynamic Photographic Stage with Diagonal Wipe -->
+      <div class="stage-media-wrap">
+        <img class="stage-base-img" [src]="previousImage" alt="" loading="lazy" decoding="async" (error)="onImageError($event)">
+        <img class="stage-top-img" [src]="activeItem.image" [alt]="activeItem.title" loading="lazy" decoding="async" (error)="onImageError($event)">
+        <div class="stage-overlay"></div>
+
+        <!-- Mobile Quick Prev / Next Arrows -->
+        <div class="stage-mobile-nav">
+          <button type="button" class="stage-arrow-btn" (click)="prevItem(); $event.stopPropagation()" aria-label="Previous service">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="stage-arrow-btn" (click)="nextItem(); $event.stopPropagation()" aria-label="Next service">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        @if (activeItem.metric) {
+          <div class="stage-metric-badge">
+            <span class="metric-val">{{ activeItem.metric }}</span>
+            <span class="metric-lbl">{{ activeItem.metricLabel }}</span>
+          </div>
+        }
+
+        <div class="stage-mode-tag">
+          Executive Healthcare Service
+        </div>
+      </div>
+
+      <!-- Active Details Content Box -->
+      <div class="stage-content-box">
+        <div class="stage-meta-row">
+          <span class="stage-cat-pill">{{ activeItem.category }}</span>
+          <span class="stage-index-tag">{{ activeItem.num }} / 12</span>
+        </div>
+
+        <h3 class="stage-active-title">{{ activeItem.title }}</h3>
+        <p class="stage-active-desc">{{ activeItem.description }}</p>
+
+        <!-- Deliverables & Core Focus Areas -->
+        <div class="stage-deliverables">
+          @for (d of activeItem.deliverables; track d) {
+            <span class="deliverable-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>{{ d }}</span>
+            </span>
+          }
+        </div>
+
+        <!-- Direct Action -->
+        <div class="stage-action-row">
+          <a href="#contact" class="btn btn-primary btn-magnetic">
+            <span>Inquire About This Service</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

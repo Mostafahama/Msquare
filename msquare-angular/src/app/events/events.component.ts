@@ -1,10 +1,7 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, Inject } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export interface Event {
   id: string;
@@ -21,7 +18,8 @@ export interface Event {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
+  styleUrls: ['./events.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('eventsSec') eventsSec!: ElementRef<HTMLElement>;
@@ -44,11 +42,11 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'medical',
       description: 'A premier pulmonology conference bringing together leading respiratory specialists for clinical updates, masterclasses, and hands-on diagnostic sessions.',
       images: [
-        'assets/pulmo event/Pulmo event-10.webp',
-        'assets/pulmo event/Pulmo event-23.webp',
-        'assets/pulmo event/Pulmo event-46.webp',
-        'assets/pulmo event/Pulmo event-48.webp',
-        'assets/pulmo event/Pulmo event-52.webp',
+        'assets/pulmo-event/pulmo-event-10.webp',
+        'assets/pulmo-event/pulmo-event-23.webp',
+        'assets/pulmo-event/pulmo-event-46.webp',
+        'assets/pulmo-event/pulmo-event-48.webp',
+        'assets/pulmo-event/pulmo-event-52.webp',
       ],
       status: 'past',
     },
@@ -59,8 +57,8 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'medical',
       description: 'The second edition of the acclaimed pulmonology conference, featuring expanded multidisciplinary sessions, international keynotes, and clinical workshops.',
       images: [
-        'assets/pulmo event/Pulmo event-46.webp',
-        'assets/pulmo event/Pulmo event-48.webp'
+        'assets/pulmo-event/pulmo-event-46.webp',
+        'assets/pulmo-event/pulmo-event-48.webp'
       ],
       status: 'past',
     },
@@ -71,7 +69,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'medical',
       description: 'A specialist ENT conference addressing the latest advances in otolaryngology, surgical interventions, and head and neck clinical care.',
       images: [
-        'assets/pulmo event/Pulmo event-23.webp'
+        'assets/pulmo-event/pulmo-event-23.webp'
       ],
       status: 'past',
     },
@@ -82,7 +80,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'medical',
       description: '"Understanding Sleep Apnea: A Multidisciplinary Approach" — an expert-led scientific gathering exploring diagnosis, ventilatory support, and therapy protocols.',
       images: [
-        'assets/pulmo event/Pulmo event-52.webp'
+        'assets/pulmo-event/pulmo-event-52.webp'
       ],
       status: 'past',
     },
@@ -94,9 +92,9 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'career',
       description: 'Connecting future clinical pharmacists with top multinational pharmaceutical manufacturers, regulatory leaders, and clinical training directors.',
       images: [
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-16.webp',
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-127.webp',
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-139.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-16.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-127.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-139.webp',
       ],
       status: 'past',
     },
@@ -107,7 +105,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'career',
       description: 'The inaugural Pharmacy Career Spot convening students and pharmacy leaders to map emerging career pathways in healthcare.',
       images: [
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-127.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-127.webp',
       ],
       status: 'past',
     },
@@ -118,7 +116,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'career',
       description: "The 4th annual career fair at Galala University, connecting university graduates with leading regional healthcare and pharma organizations.",
       images: [
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-139.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-139.webp',
       ],
       status: 'past',
     },
@@ -129,7 +127,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'career',
       description: 'A major university job fair bringing together Horus University students and corporate recruitment leaders in medical industries.',
       images: [
-        'assets/Pharmacy Career Spot/Pharmacy Career Spot-16.webp',
+        'assets/pharmacy-career-spot/pharmacy-career-spot-16.webp',
       ],
       status: 'past',
     },
@@ -141,11 +139,11 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'community',
       description: 'A benchmark civic celebration honoring regional milestones and youth initiatives through interactive assemblies and community networking.',
       images: [
-        'assets/engaz event/Engaz Events 3-253.webp',
-        'assets/engaz event/Engaz Events 3.1-12.webp',
-        'assets/engaz event/Engaz Events 3.1-27.webp',
-        'assets/engaz event/Engaz Events 3.1-53.webp',
-        'assets/engaz event/Engaz Events 3.1-6.webp',
+        'assets/engaz-event/engaz-events-3-253.webp',
+        'assets/engaz-event/engaz-events-3.1-12.webp',
+        'assets/engaz-event/engaz-events-3.1-27.webp',
+        'assets/engaz-event/engaz-events-3.1-53.webp',
+        'assets/engaz-event/engaz-events-3.1-6.webp',
       ],
       status: 'past',
     },
@@ -156,7 +154,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'community',
       description: 'An educational exhibition investigating AI-era learning paradigms and digital health applications for emerging talents.',
       images: [
-        'assets/engaz event/Engaz Events 3.1-12.webp',
+        'assets/engaz-event/engaz-events-3.1-12.webp',
       ],
       status: 'past',
     },
@@ -167,7 +165,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'community',
       description: 'An open-air science engagement fair translating complex medical and scientific principles into interactive demonstrations for the community.',
       images: [
-        'assets/engaz event/Engaz Events 3.1-27.webp',
+        'assets/engaz-event/engaz-events-3.1-27.webp',
       ],
       status: 'past',
     },
@@ -178,7 +176,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'community',
       description: "Marking one year of educational impact with Tekno Square Academy in medical sciences, technology, and applied learning.",
       images: [
-        'assets/engaz event/Engaz Events 3.1-53.webp',
+        'assets/engaz-event/engaz-events-3.1-53.webp',
       ],
       status: 'past',
     },
@@ -189,7 +187,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
       category: 'community',
       description: 'A civic youth wellness initiative promoting active lifestyles, preventative health habits, and sports participation across Port Said.',
       images: [
-        'assets/engaz event/Engaz Events 3.1-6.webp',
+        'assets/engaz-event/engaz-events-3.1-6.webp',
       ],
       status: 'past',
     },
@@ -205,11 +203,14 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
 
   get currentImage(): string {
     const images = this.activeEvent?.images;
-    if (!images || images.length === 0) return 'assets/Comprehensive.Services.webp';
+    if (!images || images.length === 0) return 'assets/comprehensive-services.webp';
     return images[this.activeImageIndex] || images[0];
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
     this.previousImage = this.currentImage;
   }
 
@@ -218,6 +219,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     this.activeFilter = cat;
     this.activeEventIndex = 0;
     this.activeImageIndex = 0;
+    this.cdr.markForCheck();
     this.triggerStageWipe();
   }
 
@@ -226,6 +228,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     this.previousImage = this.currentImage;
     this.activeEventIndex = index;
     this.activeImageIndex = 0;
+    this.cdr.markForCheck();
     this.triggerStageWipe();
   }
 
@@ -233,6 +236,7 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     if (this.activeImageIndex === imgIndex) return;
     this.previousImage = this.currentImage;
     this.activeImageIndex = imgIndex;
+    this.cdr.markForCheck();
     this.triggerStageWipe();
   }
 
@@ -244,6 +248,13 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
   prevEvent() {
     const prevIdx = (this.activeEventIndex - 1 + this.filteredEvents.length) % this.filteredEvents.length;
     this.selectEvent(prevIdx);
+  }
+
+  onImageError(event: globalThis.Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'assets/placeholder.webp';
+    }
   }
 
   private touchStartX = 0;
@@ -274,67 +285,71 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
    * Signature Diagonal-Wipe Image Transition Motif (~25° polygon sweep)
    */
   private triggerStageWipe() {
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || !this.cinematicStage?.nativeElement) return;
+    this.ngZone.runOutsideAngular(() => {
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion || !this.cinematicStage?.nativeElement) return;
 
-    const stage = this.cinematicStage.nativeElement;
-    const wipingImg = stage.querySelector<HTMLElement>('.cin-top-img');
-    const infoPanel = stage.querySelector<HTMLElement>('.cin-meta-panel');
+      const stage = this.cinematicStage.nativeElement;
+      const wipingImg = stage.querySelector<HTMLElement>('.cin-top-img');
+      const infoPanel = stage.querySelector<HTMLElement>('.cin-meta-panel');
 
-    if (wipingImg) {
-      gsap.fromTo(wipingImg,
-        { clipPath: 'polygon(0 0, 0 0, -25% 100%, 0 100%)', opacity: 1 },
-        {
-          clipPath: 'polygon(0 0, 125% 0, 100% 100%, 0 100%)',
-          duration: 0.65,
-          ease: 'power3.inOut'
-        }
-      );
-    }
+      if (wipingImg) {
+        gsap.fromTo(wipingImg,
+          { clipPath: 'polygon(0 0, 0 0, -25% 100%, 0 100%)', opacity: 1 },
+          {
+            clipPath: 'polygon(0 0, 125% 0, 100% 100%, 0 100%)',
+            duration: 0.65,
+            ease: 'power3.inOut'
+          }
+        );
+      }
 
-    if (infoPanel) {
-      gsap.fromTo(infoPanel.children,
-        { y: 14, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.45, stagger: 0.05, ease: 'power2.out' }
-      );
-    }
+      if (infoPanel) {
+        gsap.fromTo(infoPanel.children,
+          { y: 14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.45, stagger: 0.05, ease: 'power2.out' }
+        );
+      }
+    });
   }
 
   ngAfterViewInit() {
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ngZone.runOutsideAngular(() => {
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    this.ctx = gsap.context(() => {
-      if (prefersReducedMotion) return;
+      this.ctx = gsap.context(() => {
+        if (prefersReducedMotion) return;
 
-      // SplitText heading reveal
-      if (this.evTitle?.nativeElement) {
-        const split = new SplitText(this.evTitle.nativeElement, { type: 'lines', mask: 'lines' });
-        gsap.from(split.lines, {
-          yPercent: 110,
-          duration: 0.85,
-          stagger: 0.1,
+        // SplitText heading reveal
+        if (this.evTitle?.nativeElement) {
+          const split = new SplitText(this.evTitle.nativeElement, { type: 'lines', mask: 'lines' });
+          gsap.from(split.lines, {
+            yPercent: 110,
+            duration: 0.85,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: this.evTitle.nativeElement,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            }
+          });
+        }
+
+        // Initial stage reveal
+        gsap.from('.cinematic-events-stage', {
+          y: 35,
+          opacity: 0,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: this.evTitle.nativeElement,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
+            trigger: '.cinematic-events-stage',
+            start: 'top 82%',
+            toggleActions: 'play none none none'
           }
         });
-      }
-
-      // Initial stage reveal
-      gsap.from('.cinematic-events-stage', {
-        y: 35,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.cinematic-events-stage',
-          start: 'top 82%',
-          toggleActions: 'play none none none'
-        }
-      });
-    }, this.eventsSec.nativeElement);
+      }, this.eventsSec.nativeElement);
+    });
   }
 
   ngOnDestroy() {

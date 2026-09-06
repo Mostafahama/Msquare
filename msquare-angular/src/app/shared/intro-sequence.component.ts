@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, ElementRef, ViewChild, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 
@@ -10,7 +10,7 @@ import { gsap } from 'gsap';
     <div class="intro-curtain" #curtain *ngIf="isVisible" (click)="skipIntro()">
       <div class="intro-center" #centerWrap>
         <div class="intro-logo-wrap" #logoWrap>
-          <img src="assets/M SQUARE_Icon with background.png" alt="M Square" class="intro-logo" width="84" height="84">
+          <img src="assets/m-square-icon.png" alt="M Square" class="intro-logo" width="84" height="84">
         </div>
         <div class="intro-brand-name" #brandName>
           <span>M</span><span>S</span><span>Q</span><span>U</span><span>A</span><span>R</span><span>E</span>
@@ -85,7 +85,8 @@ import { gsap } from 'gsap';
       color: rgba(255, 255, 255, 0.4);
       text-transform: uppercase;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IntroSequenceComponent implements OnInit, OnDestroy {
   @Output() introComplete = new EventEmitter<void>();
@@ -97,6 +98,11 @@ export class IntroSequenceComponent implements OnInit, OnDestroy {
   isVisible = true;
   private introTimeline: gsap.core.Timeline | null = null;
   private isSkipped = false;
+
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     if (typeof window === 'undefined') {
@@ -128,24 +134,26 @@ export class IntroSequenceComponent implements OnInit, OnDestroy {
 
     sessionStorage.setItem('msquare_intro_shown', 'true');
 
-    gsap.set(this.logoWrap.nativeElement, { scale: 0.85, opacity: 0, y: 15 });
-    gsap.set(this.brandName.nativeElement.children, { opacity: 0, y: 10 });
-    gsap.set(this.tagline.nativeElement, { opacity: 0 });
+    this.ngZone.runOutsideAngular(() => {
+      gsap.set(this.logoWrap.nativeElement, { scale: 0.85, opacity: 0, y: 15 });
+      gsap.set(this.brandName.nativeElement.children, { opacity: 0, y: 10 });
+      gsap.set(this.tagline.nativeElement, { opacity: 0 });
 
-    this.introTimeline = gsap.timeline({
-      onComplete: () => this.finish()
-    });
-
-    this.introTimeline
-      .to(this.logoWrap.nativeElement, { scale: 1, opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, 0.1)
-      .to(this.brandName.nativeElement.children, { opacity: 1, y: 0, stagger: 0.03, duration: 0.45, ease: 'power2.out' }, 0.35)
-      .to(this.tagline.nativeElement, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 0.5)
-      .to(this.curtain.nativeElement, {
-        yPercent: -100,
-        duration: 0.65,
-        ease: 'power4.inOut',
-        delay: 0.25
+      this.introTimeline = gsap.timeline({
+        onComplete: () => this.finish()
       });
+
+      this.introTimeline
+        .to(this.logoWrap.nativeElement, { scale: 1, opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, 0.1)
+        .to(this.brandName.nativeElement.children, { opacity: 1, y: 0, stagger: 0.03, duration: 0.45, ease: 'power2.out' }, 0.35)
+        .to(this.tagline.nativeElement, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 0.5)
+        .to(this.curtain.nativeElement, {
+          yPercent: -100,
+          duration: 0.65,
+          ease: 'power4.inOut',
+          delay: 0.25
+        });
+    });
   }
 
   skipIntro() {
@@ -158,11 +166,13 @@ export class IntroSequenceComponent implements OnInit, OnDestroy {
     }
 
     if (this.curtain?.nativeElement) {
-      gsap.to(this.curtain.nativeElement, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.out',
-        onComplete: () => this.finish()
+      this.ngZone.runOutsideAngular(() => {
+        gsap.to(this.curtain.nativeElement, {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power2.out',
+          onComplete: () => this.finish()
+        });
       });
     } else {
       this.finish();
@@ -170,8 +180,11 @@ export class IntroSequenceComponent implements OnInit, OnDestroy {
   }
 
   private finish() {
-    this.isVisible = false;
-    this.introComplete.emit();
+    this.ngZone.run(() => {
+      this.isVisible = false;
+      this.cdr.markForCheck();
+      this.introComplete.emit();
+    });
   }
 
   ngOnDestroy() {

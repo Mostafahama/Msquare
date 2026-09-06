@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Inject, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { HeroComponent } from './hero/hero.component';
@@ -6,6 +6,7 @@ import { IdentityComponent } from './identity/identity.component';
 import { WipePanelsComponent } from './wipe-panels/wipe-panels.component';
 import { EventsComponent } from './events/events.component';
 import { PartnersComponent } from './partners/partners.component';
+import { ContactComponent } from './contact/contact.component';
 import { FooterComponent } from './footer/footer.component';
 import { IntroSequenceComponent } from './shared/intro-sequence.component';
 import { CustomCursorComponent } from './shared/custom-cursor.component';
@@ -25,37 +26,21 @@ import { gsap } from 'gsap';
     WipePanelsComponent,
     EventsComponent,
     PartnersComponent,
+    ContactComponent,
     FooterComponent
   ],
-  template: `
-    <!-- ═══ GLOBAL EXPERIENCE LAYER ═══ -->
-    <app-intro-sequence></app-intro-sequence>
-    <app-custom-cursor></app-custom-cursor>
-
-    <!-- ═══ APP LAYOUT ═══ -->
-    <app-header></app-header>
-    <main>
-      <app-hero></app-hero>
-      <app-identity></app-identity>
-      <div class="section-seam"></div>
-      <app-wipe-panels></app-wipe-panels>
-      <div class="section-seam"></div>
-      <app-events></app-events>
-      <div class="section-seam"></div>
-      <app-partners></app-partners>
-    </main>
-    <div class="section-seam"></div>
-    <app-footer></app-footer>
-  `,
-  styleUrls: ['./app.component.scss']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private ctx!: gsap.Context;
-  private motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  private motionMediaQuery = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private smoothScroll: SmoothScrollService
+    private smoothScroll: SmoothScrollService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
@@ -63,11 +48,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.applyReducedMotion(this.motionMediaQuery.matches);
-    this.motionMediaQuery.addEventListener('change', (e) => this.applyReducedMotion(e.matches));
+    if (this.motionMediaQuery) {
+      this.applyReducedMotion(this.motionMediaQuery.matches);
+      this.motionMediaQuery.addEventListener('change', (e) => this.applyReducedMotion(e.matches));
+    }
 
-    this.ctx = gsap.context(() => {
-      document.body.classList.add('gsap-ready');
+    this.ngZone.runOutsideAngular(() => {
+      this.ctx = gsap.context(() => {
+        document.body.classList.add('gsap-ready');
+      });
     });
   }
 
@@ -84,3 +73,4 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 }
+

@@ -20,4 +20,16 @@ describe('FooterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display the current year in copyright', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.ft-bottom')?.textContent).toContain(component.currentYear.toString());
+  });
+
+  it('should display MSQUARE brand name and tag', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.ft-brand-text')?.textContent).toContain('MSQUARE');
+    expect(compiled.querySelector('.ft-tag')?.textContent).toContain('Transform Healthcare Events Into Impact');
+  });
 });
+

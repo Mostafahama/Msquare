@@ -59,8 +59,8 @@
       <!-- Main Photo Showcase with Diagonal Wipe -->
       <div class="cin-photo-canvas">
         <div class="cin-media-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-          <img class="cin-base-img" [src]="previousImage" alt="" loading="lazy" decoding="async">
-          <img class="cin-top-img" [src]="currentImage" [alt]="activeEvent.title" loading="lazy" decoding="async">
+          <img class="cin-base-img" [src]="previousImage" alt="" loading="lazy" decoding="async" (error)="onImageError($event)">
+          <img class="cin-top-img" [src]="currentImage" [alt]="activeEvent.title" loading="lazy" decoding="async" (error)="onImageError($event)">
           <div class="cin-vignette-overlay"></div>
 
           <!-- Photo Counter / Wipe Badge -->
@@ -94,7 +94,7 @@
                 [class.is-active]="activeImageIndex === i"
                 (click)="switchImage(i)"
                 [attr.aria-label]="'View photo ' + (i + 1)">
-                <img [src]="img" [alt]="activeEvent.title" loading="lazy">
+                <img [src]="img" [alt]="activeEvent.title" loading="lazy" (error)="onImageError($event)">
               </button>
             }
           </div>

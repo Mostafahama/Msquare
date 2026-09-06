@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 export class SmoothScrollService {
   private lenis: Lenis | null = null;
   private tickerCallback: ((time: number) => void) | null = null;
+
+  constructor(private ngZone: NgZone) {}
 
   init() {
     if (typeof window === 'undefined') return;
@@ -23,24 +23,26 @@ export class SmoothScrollService {
       return;
     }
 
-    this.lenis = new Lenis({
-      lerp: 0.09,
-      duration: 1.2,
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+    this.ngZone.runOutsideAngular(() => {
+      this.lenis = new Lenis({
+        lerp: 0.09,
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.5,
+      });
+
+      // Sync Lenis scroll with GSAP ScrollTrigger
+      this.lenis.on('scroll', ScrollTrigger.update);
+
+      // Coordinate with GSAP Ticker for 60/120fps display refresh outside zone
+      this.tickerCallback = (time: number) => {
+        this.lenis?.raf(time * 1000);
+      };
+
+      gsap.ticker.add(this.tickerCallback);
+      gsap.ticker.lagSmoothing(0);
     });
-
-    // Sync Lenis scroll with GSAP ScrollTrigger
-    this.lenis.on('scroll', ScrollTrigger.update);
-
-    // Coordinate with GSAP Ticker for 60/120fps display refresh
-    this.tickerCallback = (time: number) => {
-      this.lenis?.raf(time * 1000);
-    };
-
-    gsap.ticker.add(this.tickerCallback);
-    gsap.ticker.lagSmoothing(0);
   }
 
   scrollTo(target: string | HTMLElement, options?: { offset?: number; immediate?: boolean }) {
