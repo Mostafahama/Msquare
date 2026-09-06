@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
@@ -21,7 +21,7 @@ export interface Event {
   styleUrls: ['./events.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventsComponent implements AfterViewInit, OnDestroy {
+export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventsSec') eventsSec!: ElementRef<HTMLElement>;
   @ViewChild('evTitle') evTitle!: ElementRef<HTMLElement>;
   @ViewChild('cinematicStage') cinematicStage!: ElementRef<HTMLElement>;
@@ -212,6 +212,28 @@ export class EventsComponent implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {
     this.previousImage = this.currentImage;
+  }
+
+  ngOnInit() {
+    this.preloadEventImages();
+  }
+
+  private preloadEventImages() {
+    if (typeof window === 'undefined') return;
+    this.ngZone.runOutsideAngular(() => {
+      const allUrls = new Set<string>();
+      for (const ev of this.events) {
+        if (ev.images) {
+          for (const img of ev.images) {
+            allUrls.add(img);
+          }
+        }
+      }
+      allUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+      });
+    });
   }
 
   filterBy(cat: 'medical' | 'career' | 'community') {

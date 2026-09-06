@@ -8,7 +8,6 @@ import { EventsComponent } from './events/events.component';
 import { PartnersComponent } from './partners/partners.component';
 import { ContactComponent } from './contact/contact.component';
 import { FooterComponent } from './footer/footer.component';
-import { IntroSequenceComponent } from './shared/intro-sequence.component';
 import { CustomCursorComponent } from './shared/custom-cursor.component';
 import { SmoothScrollService } from './shared/smooth-scroll.service';
 import { gsap } from 'gsap';
@@ -18,7 +17,6 @@ import { gsap } from 'gsap';
   standalone: true,
   imports: [
     CommonModule,
-    IntroSequenceComponent,
     CustomCursorComponent,
     HeaderComponent,
     HeroComponent,
