@@ -16,6 +16,18 @@ import { LanguageService } from '../core/services/language.service';
     </div>
   `,
   styles: [`
+    @media (max-width: 1023px), (hover: none), (pointer: coarse) {
+      :host,
+      .custom-cursor-wrap,
+      .cursor-dot,
+      .cursor-outline {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    }
+
     .custom-cursor-wrap {
       pointer-events: none;
       position: fixed;
@@ -166,6 +178,7 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
   private yToOutline: any;
   private mouseMoveListener: ((e: MouseEvent) => void) | null = null;
   private mouseOverListener: ((e: MouseEvent) => void) | null = null;
+  private resizeListener: (() => void) | null = null;
 
   constructor(
     public lang: LanguageService,
@@ -176,19 +189,36 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (typeof window === 'undefined') return;
 
+    this.checkCursorEligibility();
+
+    this.resizeListener = () => {
+      this.checkCursorEligibility();
+    };
+    window.addEventListener('resize', this.resizeListener, { passive: true });
+  }
+
+  private checkCursorEligibility() {
+    if (typeof window === 'undefined') return;
+
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
     const isDesktop = window.innerWidth >= 1024;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldEnable = isFinePointer && isDesktop && !prefersReducedMotion;
 
-    if (isFinePointer && isDesktop && !prefersReducedMotion) {
-      this.isEnabled = true;
+    if (this.isEnabled !== shouldEnable) {
+      this.isEnabled = shouldEnable;
       this.cdr.markForCheck();
-      setTimeout(() => this.setupCursor(), 10);
+      if (shouldEnable) {
+        setTimeout(() => this.setupCursor(), 10);
+      } else {
+        this.teardownCursor();
+      }
     }
   }
 
   private setupCursor() {
     if (!this.dot || !this.outline) return;
+    this.teardownCursor();
 
     this.ngZone.runOutsideAngular(() => {
       this.xToDot = gsap.quickTo(this.dot.nativeElement, 'x', { duration: 0.1, ease: 'power3.out' });
@@ -265,12 +295,22 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  private teardownCursor() {
     if (this.mouseMoveListener && typeof window !== 'undefined') {
       window.removeEventListener('mousemove', this.mouseMoveListener);
+      this.mouseMoveListener = null;
     }
     if (this.mouseOverListener && typeof document !== 'undefined') {
       document.removeEventListener('mouseover', this.mouseOverListener);
+      this.mouseOverListener = null;
+    }
+  }
+
+  ngOnDestroy() {
+    this.teardownCursor();
+    if (this.resizeListener && typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.resizeListener);
+      this.resizeListener = null;
     }
   }
 }

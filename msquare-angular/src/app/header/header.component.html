@@ -17,14 +17,19 @@
 
       <!-- Language Switcher Pill -->
       <button class="lang-switcher" (click)="toggleLanguage()" [attr.aria-label]="lang.currentLang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'" type="button">
-        <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-        <span class="lang-opt" [class.is-active]="lang.currentLang() === 'en'">EN</span>
-        <span class="lang-sep">|</span>
-        <span class="lang-opt" [class.is-active]="lang.currentLang() === 'ar'">عربي</span>
+        <span class="lang-switcher-desktop">
+          <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-opt" [class.is-active]="lang.currentLang() === 'en'">EN</span>
+          <span class="lang-sep">|</span>
+          <span class="lang-opt" [class.is-active]="lang.currentLang() === 'ar'">عربي</span>
+        </span>
+        <span class="lang-switcher-mobile">
+          {{ lang.currentLang() === 'ar' ? 'EN' : 'عربي' }}
+        </span>
       </button>
 
       <!-- CTA Button -->

@@ -142,7 +142,7 @@
 .lang-switcher {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(8px);
@@ -156,6 +156,17 @@
   font-weight: 600;
   transition: all 0.25s var(--ease);
   user-select: none;
+  flex-shrink: 0;
+
+  .lang-switcher-desktop {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .lang-switcher-mobile {
+    display: none;
+  }
 
   .lang-globe-icon {
     width: 14px;
@@ -201,6 +212,15 @@
   &:active {
     transform: scale(0.96);
   }
+}
+
+:host-context([lang="en"]) .lang-switcher-mobile {
+  font-family: 'Tajawal', system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+:host-context([lang="ar"]) .lang-switcher-mobile {
+  font-family: var(--fd, 'Poppins', sans-serif) !important;
 }
 
 .fs-header-controls {
@@ -437,6 +457,109 @@
       .fs-item-sub { display: none; }
     }
     .fs-menu-footer { grid-template-columns: 1fr; gap: 12px; }
+  }
+}
+
+/* ── Mobile Responsive Navbar (< 768px) ── */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 10px 0;
+  }
+
+  .nav-inner {
+    padding: 0 16px;
+  }
+
+  .nav-brand {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+
+  .brand-text {
+    font-size: 0.78rem;
+    letter-spacing: 0.8px;
+  }
+
+  .nav-actions {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .lang-switcher {
+    padding: 0 10px;
+    height: 32px;
+    min-width: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    .lang-switcher-desktop {
+      display: none !important;
+    }
+
+    .lang-switcher-mobile {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .nav-menu-btn {
+    height: 32px;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-inner {
+    padding: 0 12px;
+  }
+
+  .nav-brand {
+    gap: 6px;
+  }
+
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .brand-text {
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .lang-switcher {
+    padding: 0 8px;
+    min-width: 34px;
+    height: 30px;
+
+    .lang-switcher-mobile {
+      font-size: 0.7rem;
+    }
+  }
+
+  .nav-menu-btn {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 0.65rem;
   }
 }
 
