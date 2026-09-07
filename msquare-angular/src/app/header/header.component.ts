@@ -6,6 +6,8 @@ import { MagneticButtonDirective } from '../shared/button-fx.directive';
 import { SmoothScrollService } from '../shared/smooth-scroll.service';
 import { gsap } from 'gsap';
 
+import { LanguageService } from '../core/services/language.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -26,10 +28,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private scrollSub?: Subscription;
 
   constructor(
+    public lang: LanguageService,
     private smoothScroll: SmoothScrollService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
+
+  toggleLanguage() {
+    this.lang.toggleLanguage();
+    this.cdr.markForCheck();
+  }
 
   ngOnInit() {
     this.setupScrollListener();

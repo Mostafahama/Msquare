@@ -446,3 +446,37 @@
     transition: opacity 0.3s ease;
   }
 }
+
+:host-context([dir="rtl"]) {
+  .cin-badge-counter {
+    left: auto;
+    right: 20px;
+  }
+
+  .cin-arrow-nav {
+    right: auto;
+    left: 20px;
+  }
+
+  .cin-nav-arrow svg {
+    transform: scaleX(-1);
+  }
+
+  .rail-items-wrap {
+    padding-right: 0;
+    padding-left: 4px;
+  }
+
+  .rail-item-btn {
+    text-align: right;
+
+    &:hover {
+      transform: translateX(-3px);
+    }
+
+    &.active {
+      transform: translateX(-4px);
+    }
+  }
+}
+

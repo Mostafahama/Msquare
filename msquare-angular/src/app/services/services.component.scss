@@ -429,3 +429,40 @@
     font-size: 0.9rem;
   }
 }
+
+:host-context([dir="rtl"]) {
+  .sv-explorer-list {
+    padding-right: 0;
+    padding-left: 8px;
+  }
+
+  .sv-explore-item {
+    border-left: none;
+    border-right: 3px solid transparent;
+
+    .sv-item-chevron {
+      transform: scaleX(-1);
+    }
+
+    &:hover {
+      border-left-color: transparent;
+      border-right-color: rgba(212, 168, 83, 0.5);
+      transform: translateX(-4px);
+
+      .sv-item-chevron {
+        transform: scaleX(-1) translateX(-4px);
+      }
+    }
+
+    &.is-active {
+      border-left-color: transparent;
+      border-right-color: var(--gold);
+      transform: translateX(-6px);
+
+      .sv-item-chevron {
+        transform: scaleX(-1) translateX(-4px);
+      }
+    }
+  }
+}
+

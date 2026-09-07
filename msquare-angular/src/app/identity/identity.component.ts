@@ -4,42 +4,62 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
+import { LanguageService } from '../core/services/language.service';
+
 export interface ValueItem {
   num: string;
-  title: string;
-  description: string;
+  title: { en: string; ar: string };
+  description: { en: string; ar: string };
 }
 
 export const VALUES_DATA: ValueItem[] = [
   {
     num: '01',
-    title: 'Excellence',
-    description: 'Top-quality, detail-driven events that exceed expectations every time.'
+    title: { en: 'Excellence', ar: 'التميز' },
+    description: {
+      en: 'Top-quality, detail-driven events that exceed expectations every time.',
+      ar: 'فعاليات رفيعة المستوى قائمة على دقة التفاصيل وتتجاوز التوقعات في كل مرة.'
+    }
   },
   {
     num: '02',
-    title: 'Integrity',
-    description: 'Honesty and full transparency in every relationship and decision.'
+    title: { en: 'Integrity', ar: 'النزاهة' },
+    description: {
+      en: 'Honesty and full transparency in every relationship and decision.',
+      ar: 'الصدق والشفافية المطلقة في كافة العلاقات والقرارات المهنية.'
+    }
   },
   {
     num: '03',
-    title: 'Innovation',
-    description: 'Fresh ideas and smart technology applied to healthcare event design.'
+    title: { en: 'Innovation', ar: 'الابتكار' },
+    description: {
+      en: 'Fresh ideas and smart technology applied to healthcare event design.',
+      ar: 'أفكار ملهمة وتقنيات ذكية متقدمة تثري تصميم الفعاليات الطبية.'
+    }
   },
   {
     num: '04',
-    title: 'Collaboration',
-    description: 'Stronger outcomes through meaningful partnerships and real teamwork.'
+    title: { en: 'Collaboration', ar: 'التعاون' },
+    description: {
+      en: 'Stronger outcomes through meaningful partnerships and real teamwork.',
+      ar: 'مخرجات استثنائية من خلال شراكات فاعلة وعمل جماعي وثيق.'
+    }
   },
   {
     num: '05',
-    title: 'Impact',
-    description: 'Making a measurable difference in the healthcare and pharma industries.'
+    title: { en: 'Impact', ar: 'الأثر' },
+    description: {
+      en: 'Making a measurable difference in the healthcare and pharma industries.',
+      ar: 'إحداث أثر ملموس وفارق حقيقي في القطاع الصحي والصيدلاني.'
+    }
   },
   {
     num: '06',
-    title: 'Lifelong Learning',
-    description: 'We support continuous growth and knowledge sharing at every career stage.'
+    title: { en: 'Lifelong Learning', ar: 'التعلم المستمر' },
+    description: {
+      en: 'We support continuous growth and knowledge sharing at every career stage.',
+      ar: 'دعم التطور المهني المستمر ونقل وتبادل المعرفة في مختلف المراحل.'
+    }
   }
 ];
 
@@ -61,7 +81,10 @@ export class IdentityComponent implements AfterViewInit, OnDestroy {
   readonly values: ValueItem[] = VALUES_DATA;
   private ctx!: gsap.Context;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    public lang: LanguageService,
+    private ngZone: NgZone
+  ) {}
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {

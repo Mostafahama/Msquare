@@ -4,10 +4,12 @@ import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
 
+import { LanguageService } from '../core/services/language.service';
+
 export interface ContactItem {
   type: 'address' | 'email' | 'phone';
-  label: string;
-  value: string;
+  label: { en: string; ar: string };
+  value: { en: string; ar: string };
   href: string;
   isExternal?: boolean;
 }
@@ -29,32 +31,33 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
   readonly contactItems: ContactItem[] = [
     {
       type: 'address',
-      label: 'Headquarters',
-      value: 'Cairo — AlQattamia District, 36 AlMarwa Land',
+      label: { en: 'Headquarters', ar: 'المقر الرئيسي' },
+      value: { en: 'Cairo — AlQattamia District, 36 AlMarwa Land', ar: 'القاهرة — حي القطامية، 36 أرض المروة' },
       href: 'https://maps.google.com/?q=AlQattamia+District+Cairo',
       isExternal: true
     },
     {
       type: 'email',
-      label: 'General Inquiries',
-      value: 'admin@mtechsquare.com',
+      label: { en: 'General Inquiries', ar: 'الاستفسارات العامة' },
+      value: { en: 'admin@mtechsquare.com', ar: 'admin@mtechsquare.com' },
       href: 'mailto:admin@mtechsquare.com'
     },
     {
       type: 'phone',
-      label: 'Direct Line 1',
-      value: '+20 100 290 6884',
+      label: { en: 'Direct Line 1', ar: 'الخط المباشر 1' },
+      value: { en: '+20 100 290 6884', ar: '+20 100 290 6884' },
       href: 'tel:+201002906884'
     },
     {
       type: 'phone',
-      label: 'Direct Line 2',
-      value: '+20 106 473 1374',
+      label: { en: 'Direct Line 2', ar: 'الخط المباشر 2' },
+      value: { en: '+20 106 473 1374', ar: '+20 106 473 1374' },
       href: 'tel:+201064731374'
     }
   ];
 
   constructor(
+    public lang: LanguageService,
     private el: ElementRef,
     private ngZone: NgZone
   ) {}

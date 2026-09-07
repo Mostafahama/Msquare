@@ -1,8 +1,8 @@
 <section class="partners" id="partners">
   <div class="container">
-    <p class="eyebrow">Our Partners</p>
-    <h2 class="partners-title" #ptTitle>Trusted By Leading<br><span class="gold-text word-sweep">Healthcare Organizations</span></h2>
-    <p class="partners-sub">We collaborate with pharmaceutical companies, universities, professional medical societies, and industry bodies across Egypt.</p>
+    <p class="eyebrow">{{ lang.t().partners.eyebrow }}</p>
+    <h2 class="partners-title" #ptTitle>{{ lang.t().partners.titleMain }}<br><span class="gold-text word-sweep">{{ lang.t().partners.titleHighlight }}</span></h2>
+    <p class="partners-sub">{{ lang.t().partners.subtitle }}</p>
   </div>
 
   <!-- Logo wall: dual-row infinite CSS marquee with velocity reaction and tap-to-inspect -->
@@ -21,12 +21,12 @@
              (keydown.enter)="selectPartner(partner.name)"
              tabindex="0"
              role="button"
-             [attr.aria-label]="partner.name">
+             [attr.aria-label]="lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name">
           @if (partner.logoPath) {
-            <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
+            <img [src]="partner.logoPath" [alt]="(lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name) + ' logo'" loading="lazy" decoding="async">
           } @else {
             <span class="logo-abbr">{{ partner.abbr || partner.name }}</span>
-            <span class="logo-full-name">{{ partner.name }}</span>
+            <span class="logo-full-name">{{ lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name }}</span>
           }
         </div>
       }
@@ -41,12 +41,12 @@
              (keydown.enter)="selectPartner(partner.name)"
              tabindex="0"
              role="button"
-             [attr.aria-label]="partner.name">
+             [attr.aria-label]="lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name">
           @if (partner.logoPath) {
-            <img [src]="partner.logoPath" [alt]="partner.name + ' logo'" loading="lazy" decoding="async">
+            <img [src]="partner.logoPath" [alt]="(lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name) + ' logo'" loading="lazy" decoding="async">
           } @else {
             <span class="logo-abbr">{{ partner.abbr || partner.name }}</span>
-            <span class="logo-full-name">{{ partner.name }}</span>
+            <span class="logo-full-name">{{ lang.currentLang() === 'ar' && partner.nameAr ? partner.nameAr : partner.name }}</span>
           }
         </div>
       }
@@ -54,3 +54,4 @@
 
   </div>
 </section>
+

@@ -4,12 +4,12 @@
     <!-- ═══ HEADER & CATEGORY FILTER ═══ -->
     <div class="events-cin-header">
       <div class="header-text-block">
-        <p class="eyebrow">Curated Flagship Portfolio</p>
+        <p class="eyebrow">{{ lang.t().events.eyebrow }}</p>
         <h2 class="ev-main-title" #evTitle>
-          Featured <span class="word-sweep">Events</span>
+          {{ lang.t().events.titleMain }} <span class="word-sweep">{{ lang.t().events.titleHighlight }}</span>
         </h2>
         <p class="ev-main-sub">
-          A visual record of medical congresses, student career forums, and healthcare initiatives across Egypt.
+          {{ lang.t().events.subtitle }}
         </p>
       </div>
 
@@ -20,21 +20,21 @@
           class="pill-btn"
           [class.active]="activeFilter === 'medical'"
           (click)="filterBy('medical')">
-          Medical Conferences (4)
+          {{ lang.t().events.filterMedical }}
         </button>
         <button
           type="button"
           class="pill-btn"
           [class.active]="activeFilter === 'career'"
           (click)="filterBy('career')">
-          Career &amp; Talent Fairs (4)
+          {{ lang.t().events.filterCareer }}
         </button>
         <button
           type="button"
           class="pill-btn"
           [class.active]="activeFilter === 'community'"
           (click)="filterBy('community')">
-          Community Initiatives (5)
+          {{ lang.t().events.filterCommunity }}
         </button>
       </div>
     </div>
@@ -49,7 +49,7 @@
           [class.active]="activeEventIndex === idx"
           (click)="selectEvent(idx)">
           <span class="mob-event-num">0{{ idx + 1 }}</span>
-          <span class="mob-event-title">{{ ev.title }}</span>
+          <span class="mob-event-title">{{ ev.title[lang.currentLang()] }}</span>
         </button>
       }
     </div>
@@ -60,23 +60,23 @@
       <div class="cin-photo-canvas">
         <div class="cin-media-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
           <img class="cin-base-img" [src]="previousImage" alt="" (error)="onImageError($event)">
-          <img class="cin-top-img" [src]="currentImage" [alt]="activeEvent.title" fetchpriority="high" (error)="onImageError($event)">
+          <img class="cin-top-img" [src]="currentImage" [alt]="activeEvent.title[lang.currentLang()]" fetchpriority="high" (error)="onImageError($event)">
           <div class="cin-vignette-overlay"></div>
 
           <!-- Photo Counter / Wipe Badge -->
           <div class="cin-badge-counter">
             <span class="wipe-motif-icon">/</span>
-            <span>PHOTO {{ activeImageIndex + 1 }} OF {{ activeEvent.images.length || 1 }}</span>
+            <span>{{ lang.t().events.photoOf(activeImageIndex + 1, activeEvent.images.length || 1) }}</span>
           </div>
 
           <!-- Prev / Next Navigation Arrows -->
           <div class="cin-arrow-nav">
-            <button type="button" class="cin-nav-arrow" (click)="prevEvent()" aria-label="Previous Event">
+            <button type="button" class="cin-nav-arrow" (click)="prevEvent()" [attr.aria-label]="lang.t().events.prevEvent">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
               </svg>
             </button>
-            <button type="button" class="cin-nav-arrow" (click)="nextEvent()" aria-label="Next Event">
+            <button type="button" class="cin-nav-arrow" (click)="nextEvent()" [attr.aria-label]="lang.t().events.nextEvent">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
               </svg>
@@ -94,7 +94,7 @@
                 [class.is-active]="activeImageIndex === i"
                 (click)="switchImage(i)"
                 [attr.aria-label]="'View photo ' + (i + 1)">
-                <img [src]="img" [alt]="activeEvent.title" loading="lazy" (error)="onImageError($event)">
+                <img [src]="img" [alt]="activeEvent.title[lang.currentLang()]" loading="lazy" (error)="onImageError($event)">
               </button>
             }
           </div>
@@ -104,21 +104,21 @@
       <!-- Event Intelligence & Meta Panel -->
       <div class="cin-meta-panel">
         <div class="cin-meta-header">
-          <span class="cin-date-tag">{{ activeEvent.date }}</span>
+          <span class="cin-date-tag">{{ activeEvent.date[lang.currentLang()] }}</span>
           @if (activeEvent.status === 'upcoming') {
-            <span class="badge-upcoming">Upcoming</span>
+            <span class="badge-upcoming">{{ lang.t().events.upcoming }}</span>
           }
           <span class="cin-cat-tag cin-cat-{{ activeEvent.category }}">
-            {{ activeEvent.category === 'medical' ? 'Medical Congress' : activeEvent.category === 'career' ? 'Career & Talent' : 'Civic & CSR' }}
+            {{ activeEvent.category === 'medical' ? lang.t().events.catMedical : activeEvent.category === 'career' ? lang.t().events.catCareer : lang.t().events.catCommunity }}
           </span>
         </div>
 
-        <h3 class="cin-event-title">{{ activeEvent.title }}</h3>
-        <p class="cin-event-desc">{{ activeEvent.description }}</p>
+        <h3 class="cin-event-title">{{ activeEvent.title[lang.currentLang()] }}</h3>
+        <p class="cin-event-desc">{{ activeEvent.description[lang.currentLang()] }}</p>
 
         <!-- Quick Event Selector Rail -->
         <div class="cin-event-rail">
-          <span class="rail-header-label">PORTFOLIO INDEX</span>
+          <span class="rail-header-label">{{ lang.t().events.portfolioIndex }}</span>
           <div class="rail-items-wrap">
             @for (ev of filteredEvents; track ev.id; let idx = $index) {
               <button
@@ -127,7 +127,7 @@
                 [class.active]="activeEventIndex === idx"
                 (click)="selectEvent(idx)">
                 <span class="rail-num">0{{ idx + 1 }}</span>
-                <span class="rail-title">{{ ev.title }}</span>
+                <span class="rail-title">{{ ev.title[lang.currentLang()] }}</span>
               </button>
             }
           </div>
@@ -139,3 +139,4 @@
 
   </div>
 </section>
+

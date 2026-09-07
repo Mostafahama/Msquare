@@ -124,7 +124,7 @@ export class IntroSequenceComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:keydown')
-  @HostListener('window:wheel', ['$event'])
+  @HostListener('window:wheel')
   onUserInteraction() {
     this.skipIntro();
   }

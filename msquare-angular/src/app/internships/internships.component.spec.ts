@@ -29,6 +29,7 @@ describe('InternshipsComponent', () => {
   it('should select internship item correctly', () => {
     component.selectItem(2);
     expect(component.activeIndex).toBe(2);
-    expect(component.activeItem.title).toBe('Medical Research');
+    expect(component.activeItem.title.en).toBe('Medical Research');
+    expect(component.activeItem.title.ar).toBe('البحث الطبي والأدلة الإكلينيكية');
   });
 });

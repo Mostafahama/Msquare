@@ -9,20 +9,32 @@
     <!-- Desktop Minimal Quick Links & Actions -->
     <div class="nav-actions">
       <ul class="nav-desktop-links" role="menubar">
-        <li role="none"><a href="#about" class="nav-underline-link" (click)="navigateTo('about', $event)">Identity</a></li>
-        <li role="none"><a href="#services" class="nav-underline-link" (click)="navigateTo('services', $event)">Services</a></li>
-        <li role="none"><a href="#events" class="nav-underline-link" (click)="navigateTo('events', $event)">Portfolio</a></li>
-        <li role="none"><a href="#partners" class="nav-underline-link" (click)="navigateTo('partners', $event)">Partners</a></li>
+        <li role="none"><a href="#about" class="nav-underline-link" (click)="navigateTo('about', $event)">{{ lang.t().nav.identity }}</a></li>
+        <li role="none"><a href="#services" class="nav-underline-link" (click)="navigateTo('services', $event)">{{ lang.t().nav.services }}</a></li>
+        <li role="none"><a href="#events" class="nav-underline-link" (click)="navigateTo('events', $event)">{{ lang.t().nav.portfolio }}</a></li>
+        <li role="none"><a href="#partners" class="nav-underline-link" (click)="navigateTo('partners', $event)">{{ lang.t().nav.partners }}</a></li>
       </ul>
+
+      <!-- Language Switcher Pill -->
+      <button class="lang-switcher" (click)="toggleLanguage()" [attr.aria-label]="lang.currentLang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'" type="button">
+        <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span class="lang-opt" [class.is-active]="lang.currentLang() === 'en'">EN</span>
+        <span class="lang-sep">|</span>
+        <span class="lang-opt" [class.is-active]="lang.currentLang() === 'ar'">عربي</span>
+      </button>
 
       <!-- CTA Button -->
       <a href="#contact" class="btn btn-primary nav-cta btn-magnetic" (click)="navigateTo('contact', $event)" appMagnetic>
-        <span>Partner With Us</span>
+        <span>{{ lang.t().nav.cta }}</span>
       </a>
 
       <!-- Minimal MENU Trigger Button -->
       <button class="nav-menu-btn" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" aria-label="Toggle Fullscreen Menu">
-        <span class="menu-btn-label">{{ isMenuOpen ? 'CLOSE' : 'MENU' }}</span>
+        <span class="menu-btn-label">{{ isMenuOpen ? lang.t().nav.close : lang.t().nav.menu }}</span>
         <div class="menu-icon-bars" [class.is-open]="isMenuOpen">
           <span class="bar bar-1"></span>
           <span class="bar bar-2"></span>
@@ -42,58 +54,74 @@
         <img src="assets/m-square-icon.png" alt="M Square" class="fs-logo" width="32" height="32">
         <span class="fs-brand-name">MSQUARE</span>
       </div>
-      <button class="fs-close-btn" (click)="closeMenu()" aria-label="Close navigation">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+
+      <div class="fs-header-controls">
+        <!-- Language Switcher in Fullscreen Menu -->
+        <button class="lang-switcher fs-lang-switcher" (click)="toggleLanguage()" [attr.aria-label]="lang.currentLang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'" type="button">
+          <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-opt" [class.is-active]="lang.currentLang() === 'en'">EN</span>
+          <span class="lang-sep">|</span>
+          <span class="lang-opt" [class.is-active]="lang.currentLang() === 'ar'">عربي</span>
+        </button>
+
+        <button class="fs-close-btn" (click)="closeMenu()" aria-label="Close navigation">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Main Navigation Items -->
     <nav class="fs-nav-list" role="navigation">
       <a href="#about" class="fs-nav-item" (click)="navigateTo('about', $event)">
         <span class="fs-item-num">01</span>
-        <span class="fs-item-text">Identity &amp; Purpose</span>
-        <span class="fs-item-sub">Manifesto &amp; Values</span>
+        <span class="fs-item-text">{{ lang.t().nav.menuItems.identityTitle }}</span>
+        <span class="fs-item-sub">{{ lang.t().nav.menuItems.identitySub }}</span>
       </a>
       <a href="#services" class="fs-nav-item" (click)="navigateTo('services', $event)">
         <span class="fs-item-num">02</span>
-        <span class="fs-item-text">Healthcare Services</span>
-        <span class="fs-item-sub">12 Specialized Solutions</span>
+        <span class="fs-item-text">{{ lang.t().nav.menuItems.servicesTitle }}</span>
+        <span class="fs-item-sub">{{ lang.t().nav.menuItems.servicesSub }}</span>
       </a>
       <a href="#events" class="fs-nav-item" (click)="navigateTo('events', $event)">
         <span class="fs-item-num">03</span>
-        <span class="fs-item-text">Featured Portfolio</span>
-        <span class="fs-item-sub">Congresses &amp; Forums</span>
+        <span class="fs-item-text">{{ lang.t().nav.menuItems.portfolioTitle }}</span>
+        <span class="fs-item-sub">{{ lang.t().nav.menuItems.portfolioSub }}</span>
       </a>
       <a href="#partners" class="fs-nav-item" (click)="navigateTo('partners', $event)">
         <span class="fs-item-num">04</span>
-        <span class="fs-item-text">Academic &amp; Industry</span>
-        <span class="fs-item-sub">Multinationals &amp; Universities</span>
+        <span class="fs-item-text">{{ lang.t().nav.menuItems.partnersTitle }}</span>
+        <span class="fs-item-sub">{{ lang.t().nav.menuItems.partnersSub }}</span>
       </a>
       <a href="#contact" class="fs-nav-item" (click)="navigateTo('contact', $event)">
         <span class="fs-item-num">05</span>
-        <span class="fs-item-text">Contact &amp; Headquarters</span>
-        <span class="fs-item-sub">Cairo AlQattamia District</span>
+        <span class="fs-item-text">{{ lang.t().nav.menuItems.contactTitle }}</span>
+        <span class="fs-item-sub">{{ lang.t().nav.menuItems.contactSub }}</span>
       </a>
     </nav>
 
     <!-- Bottom Contact & Meta Row -->
     <div class="fs-menu-footer">
       <div class="fs-meta-col">
-        <span class="fs-meta-label">DIRECT INQUIRIES</span>
+        <span class="fs-meta-label">{{ lang.t().nav.menuFooter.inquiries }}</span>
         <a href="mailto:admin@mtechsquare.com" class="fs-meta-val">admin&#64;mtechsquare.com</a>
       </div>
       <div class="fs-meta-col">
-        <span class="fs-meta-label">TELEPHONE</span>
+        <span class="fs-meta-label">{{ lang.t().nav.menuFooter.telephone }}</span>
         <a href="tel:+201002906884" class="fs-meta-val">+20 100 290 6884</a>
       </div>
       <div class="fs-meta-col">
-        <span class="fs-meta-label">LOCATION</span>
-        <span class="fs-meta-val">Cairo, Egypt — AlQattamia 36 AlMarwa</span>
+        <span class="fs-meta-label">{{ lang.t().nav.menuFooter.location }}</span>
+        <span class="fs-meta-val">{{ lang.t().nav.menuFooter.locationValue }}</span>
       </div>
     </div>
   </div>
 </div>
+
 

@@ -4,6 +4,8 @@ import { gsap } from 'gsap';
 import { CapabilityItem } from '../services/services.data';
 import { INTERNSHIPS_DATA } from './internships.data';
 
+import { LanguageService } from '../core/services/language.service';
+
 @Component({
   selector: 'app-internships',
   standalone: true,
@@ -24,6 +26,7 @@ export class InternshipsComponent implements AfterViewInit, OnDestroy {
   private touchStartY = 0;
 
   constructor(
+    public lang: LanguageService,
     private el: ElementRef,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef

@@ -254,3 +254,37 @@
   .values-spine-track .values-spine-fill { transform: scaleY(1) !important; }
 }
 
+:host-context([dir="rtl"]) {
+  .values-grid-wrap {
+    padding-left: 0;
+    padding-right: 28px;
+  }
+
+  .values-spine-track {
+    left: auto;
+    right: 6px;
+  }
+
+  .value-item {
+    border-right: none;
+    border-left: 1px solid var(--border);
+
+    &:nth-child(3n) { border-left: none; }
+    &:nth-last-child(-n+3) { border-bottom: none; }
+
+    &:hover,
+    &.val-active {
+      padding-left: 24px;
+      padding-right: 32px;
+      transform: translateX(-6px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .value-item.val-active {
+      transform: translateX(-6px);
+    }
+  }
+}
+
+

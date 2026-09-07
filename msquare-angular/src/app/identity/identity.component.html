@@ -4,8 +4,8 @@
 
     <!-- Vision & Mission — side-by-side cards -->
     <div class="vm-header" #leftCol>
-      <p class="eyebrow">Who We Are</p>
-      <h2 class="vm-heading" #vmHeading>Built on clarity.<br>Driven by <span class="word-sweep">purpose.</span></h2>
+      <p class="eyebrow">{{ lang.t().identity.eyebrow }}</p>
+      <h2 class="vm-heading" #vmHeading>{{ lang.t().identity.headingMain }} <span class="word-sweep">{{ lang.t().identity.headingHighlight }}</span></h2>
     </div>
 
     <div class="vm-cards-wrap">
@@ -21,8 +21,8 @@
               <circle cx="12" cy="12" r="3"/>
             </svg>
           </div>
-          <span class="vm-label">OUR VISION</span>
-          <p class="vm-text">To be the leading platform for knowledge exchange, setting the highest standards in medical event planning and fostering a global community of healthcare professionals.</p>
+          <span class="vm-label">{{ lang.t().identity.visionLabel }}</span>
+          <p class="vm-text">{{ lang.t().identity.visionText }}</p>
         </div>
 
         <div class="vm-card accent-card">
@@ -34,15 +34,15 @@
               <circle cx="12" cy="12" r="2"/>
             </svg>
           </div>
-          <span class="vm-label">OUR MISSION</span>
-          <p class="vm-text">Committed to delivering flawless execution, innovative formats, and impactful content that bridges academic theory and clinical practice across Egypt's healthcare sector.</p>
+          <span class="vm-label">{{ lang.t().identity.missionLabel }}</span>
+          <p class="vm-text">{{ lang.t().identity.missionText }}</p>
         </div>
       </div>
     </div>
 
     <!-- Core Values — 2×3 grid on desktop -->
     <div class="values-wrap" id="values">
-      <p class="eyebrow">Core Values</p>
+      <p class="eyebrow">{{ lang.t().identity.valuesEyebrow }}</p>
       
       <div class="values-grid-wrap">
         <div class="values-spine-track" aria-hidden="true">
@@ -54,8 +54,8 @@
             <div class="value-item" #valueItem>
               <span class="val-num">{{ item.num }}</span>
               <div class="val-body">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
+                <h3>{{ item.title[lang.currentLang()] }}</h3>
+                <p>{{ item.description[lang.currentLang()] }}</p>
               </div>
             </div>
           }

@@ -8,7 +8,7 @@
           <img src="assets/m-square-icon.png" alt="M Square" class="ft-logo-img" width="40" height="40">
           <span class="ft-brand-text">MSQUARE</span>
         </div>
-        <p class="ft-tag">Transform Healthcare Events Into Impact.</p>
+        <p class="ft-tag">{{ lang.t().footer.tagline }}</p>
         <div class="ft-contact-links">
           <a href="mailto:admin@mtechsquare.com" class="ft-contact-link">admin&#64;mtechsquare.com</a>
           <a href="tel:+201002906884" class="ft-contact-link">+20 100 290 6884</a>
@@ -16,31 +16,32 @@
       </div>
 
       <div class="ft-col">
-        <h4>Services</h4>
+        <h4>{{ lang.t().footer.servicesHeader }}</h4>
         <ul>
-          <li><a href="#services">Conference Planning</a></li>
-          <li><a href="#services">CME Accreditation</a></li>
-          <li><a href="#services">Virtual &amp; Hybrid Events</a></li>
-          <li><a href="#services">On-site Logistics</a></li>
-          <li><a href="#services">Media Production</a></li>
+          <li><a href="#services">{{ lang.t().footer.servicesList.confPlanning }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.servicesList.cme }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.servicesList.hybrid }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.servicesList.logistics }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.servicesList.media }}</a></li>
         </ul>
       </div>
 
       <div class="ft-col">
-        <h4>Programs</h4>
+        <h4>{{ lang.t().footer.programsHeader }}</h4>
         <ul>
-          <li><a href="#services">Clinical Pharmacy</a></li>
-          <li><a href="#services">Medical Research</a></li>
-          <li><a href="#services">Drug Safety</a></li>
-          <li><a href="#services">Quality Assurance</a></li>
+          <li><a href="#services">{{ lang.t().footer.programsList.clinicalPharmacy }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.programsList.medicalResearch }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.programsList.drugSafety }}</a></li>
+          <li><a href="#services">{{ lang.t().footer.programsList.qualityAssurance }}</a></li>
         </ul>
       </div>
 
     </div>
 
     <div class="ft-bottom">
-      <p>&copy; {{ currentYear }} M Square — Part of MTech Square Group. All rights reserved.</p>
+      <p>&copy; {{ currentYear }} {{ lang.t().footer.copyright }}</p>
     </div>
   </div>
 </footer>
+
 

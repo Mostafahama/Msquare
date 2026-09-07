@@ -1,5 +1,5 @@
 <!-- Mobile Quick-Select Horizontal Chips (Desktop Hidden) -->
-<div class="mobile-explorer-nav" role="tablist" aria-label="Quick select service">
+<div class="mobile-explorer-nav" role="tablist" [attr.aria-label]="lang.t().servicesUi.exploreLabel">
   @for (item of items; track item.id; let idx = $index) {
     <button
       type="button"
@@ -7,7 +7,7 @@
       [class.active]="activeIndex === idx"
       (click)="selectItem(idx)">
       <span class="mob-chip-num">{{ item.num }}</span>
-      <span class="mob-chip-title">{{ item.title }}</span>
+      <span class="mob-chip-title">{{ item.title[lang.currentLang()] }}</span>
     </button>
   }
 </div>
@@ -26,8 +26,8 @@
         (click)="selectItem(idx)">
         <span class="sv-item-num">{{ item.num }}</span>
         <div class="sv-item-info">
-          <h4 class="sv-item-title">{{ item.title }}</h4>
-          <span class="sv-item-cat">{{ item.category }}</span>
+          <h4 class="sv-item-title">{{ item.title[lang.currentLang()] }}</h4>
+          <span class="sv-item-cat">{{ item.category[lang.currentLang()] }}</span>
         </div>
         <span class="sv-item-chevron" aria-hidden="true">&rarr;</span>
       </div>
@@ -41,17 +41,17 @@
       <!-- Dynamic Photographic Stage with Diagonal Wipe -->
       <div class="stage-media-wrap">
         <img class="stage-base-img" [src]="previousImage" alt="" loading="lazy" decoding="async" (error)="onImageError($event)">
-        <img class="stage-top-img" [src]="activeItem.image" [alt]="activeItem.title" loading="lazy" decoding="async" (error)="onImageError($event)">
+        <img class="stage-top-img" [src]="activeItem.image" [alt]="activeItem.title[lang.currentLang()]" loading="lazy" decoding="async" (error)="onImageError($event)">
         <div class="stage-overlay"></div>
 
         <!-- Mobile Quick Prev / Next Arrows -->
         <div class="stage-mobile-nav">
-          <button type="button" class="stage-arrow-btn" (click)="prevItem(); $event.stopPropagation()" aria-label="Previous service">
+          <button type="button" class="stage-arrow-btn" (click)="prevItem(); $event.stopPropagation()" [attr.aria-label]="lang.t().servicesUi.prev">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
-          <button type="button" class="stage-arrow-btn" (click)="nextItem(); $event.stopPropagation()" aria-label="Next service">
+          <button type="button" class="stage-arrow-btn" (click)="nextItem(); $event.stopPropagation()" [attr.aria-label]="lang.t().servicesUi.next">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -61,28 +61,28 @@
         @if (activeItem.metric) {
           <div class="stage-metric-badge">
             <span class="metric-val">{{ activeItem.metric }}</span>
-            <span class="metric-lbl">{{ activeItem.metricLabel }}</span>
+            <span class="metric-lbl">{{ activeItem.metricLabel?.[lang.currentLang()] }}</span>
           </div>
         }
 
         <div class="stage-mode-tag">
-          Executive Healthcare Service
+          {{ lang.t().servicesUi.executiveServiceTag }}
         </div>
       </div>
 
       <!-- Active Details Content Box -->
       <div class="stage-content-box">
         <div class="stage-meta-row">
-          <span class="stage-cat-pill">{{ activeItem.category }}</span>
+          <span class="stage-cat-pill">{{ activeItem.category[lang.currentLang()] }}</span>
           <span class="stage-index-tag">{{ activeItem.num }} / 12</span>
         </div>
 
-        <h3 class="stage-active-title">{{ activeItem.title }}</h3>
-        <p class="stage-active-desc">{{ activeItem.description }}</p>
+        <h3 class="stage-active-title">{{ activeItem.title[lang.currentLang()] }}</h3>
+        <p class="stage-active-desc">{{ activeItem.description[lang.currentLang()] }}</p>
 
         <!-- Deliverables & Core Focus Areas -->
         <div class="stage-deliverables">
-          @for (d of activeItem.deliverables; track d) {
+          @for (d of activeItem.deliverables[lang.currentLang()]; track d) {
             <span class="deliverable-chip">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="20 6 9 17 4 12"/>
@@ -95,7 +95,7 @@
         <!-- Direct Action -->
         <div class="stage-action-row">
           <a href="#contact" class="btn btn-primary btn-magnetic">
-            <span>Inquire About This Service</span>
+            <span>{{ lang.t().servicesUi.inquireBtn }}</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
             </svg>
@@ -107,3 +107,4 @@
   </div>
 
 </div>
+

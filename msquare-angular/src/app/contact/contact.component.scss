@@ -142,5 +142,22 @@
   50% { transform: scale(1.04); opacity: 1; }
 }
 @keyframes spin {
+  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+:host-context([dir="rtl"]) {
+  .ct-arrow {
+    margin-left: 0;
+    margin-right: auto;
+    transform: scaleX(-1);
+  }
+
+  .ct-link:hover .ct-arrow {
+    transform: scaleX(-1) translateX(4px);
+  }
+
+  .btn-icon {
+    transform: scaleX(-1);
+  }
 }

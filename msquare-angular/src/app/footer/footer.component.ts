@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LanguageService } from '../core/services/language.service';
 
 @Component({
   selector: 'app-footer',
@@ -11,5 +12,8 @@ import { CommonModule } from '@angular/common';
 })
 export class FooterComponent {
   readonly currentYear = new Date().getFullYear();
+
+  constructor(public lang: LanguageService) {}
 }
+
 

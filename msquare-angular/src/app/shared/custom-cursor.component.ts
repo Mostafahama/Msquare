@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
+import { LanguageService } from '../core/services/language.service';
 
 @Component({
   selector: 'app-custom-cursor',
@@ -67,6 +68,12 @@ import { gsap } from 'gsap';
       transition: opacity 0.2s ease, transform 0.2s ease;
       text-transform: uppercase;
       user-select: none;
+    }
+
+    :host-context([lang="ar"]) .cursor-text {
+      font-family: var(--fa, 'Tajawal', sans-serif);
+      font-size: 10px;
+      letter-spacing: 0;
     }
 
     /* State: Hover regular link / button */
@@ -161,6 +168,7 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
   private mouseOverListener: ((e: MouseEvent) => void) | null = null;
 
   constructor(
+    public lang: LanguageService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -216,28 +224,28 @@ export class CustomCursorComponent implements OnInit, OnDestroy {
         // Check for Menu toggle
         if (target.closest('.nav-menu-btn, .nav-toggle')) {
           outEl.className = 'cursor-outline hover-open';
-          if (textEl) textEl.textContent = 'OPEN';
+          if (textEl) textEl.textContent = this.lang.t().cursor.open;
           return;
         }
 
         // Check for interactive service explore item
         if (target.closest('.sv-explore-item, .stage-metric-badge, .service-nav-item')) {
           outEl.className = 'cursor-outline hover-explore';
-          if (textEl) textEl.textContent = 'EXPLORE';
+          if (textEl) textEl.textContent = this.lang.t().cursor.explore;
           return;
         }
 
         // Check for image gallery / events
         if (target.closest('.mo-item, .ev-photo-stage, .ev-photo-wrap, .in-organic-wrap, .logo-tile')) {
           outEl.className = 'cursor-outline hover-image';
-          if (textEl) textEl.textContent = 'VIEW';
+          if (textEl) textEl.textContent = this.lang.t().cursor.view;
           return;
         }
 
         // Check for interactive timeline / gallery drag
         if (target.closest('.timeline-node, .ev-timeline-card, .timeline-spine, .gallery-strip')) {
           outEl.className = 'cursor-outline hover-drag';
-          if (textEl) textEl.textContent = 'DRAG';
+          if (textEl) textEl.textContent = this.lang.t().cursor.drag;
           return;
         }
 

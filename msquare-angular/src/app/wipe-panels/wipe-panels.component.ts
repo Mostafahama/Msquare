@@ -4,6 +4,8 @@ import { gsap } from 'gsap';
 import { ServicesComponent } from '../services/services.component';
 import { InternshipsComponent } from '../internships/internships.component';
 
+import { LanguageService } from '../core/services/language.service';
+
 @Component({
   selector: 'app-wipe-panels',
   standalone: true,
@@ -20,6 +22,7 @@ export class WipePanelsComponent implements AfterViewInit, OnDestroy {
   private ctx!: gsap.Context;
 
   constructor(
+    public lang: LanguageService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}

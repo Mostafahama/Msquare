@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { SERVICES_DATA, CapabilityItem } from './services.data';
 
+import { LanguageService } from '../core/services/language.service';
+
 @Component({
   selector: 'app-services',
   standalone: true,
@@ -23,6 +25,7 @@ export class ServicesComponent implements AfterViewInit, OnDestroy {
   private touchStartY = 0;
 
   constructor(
+    public lang: LanguageService,
     private el: ElementRef,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef

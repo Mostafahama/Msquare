@@ -67,6 +67,7 @@
   */
   --fd: 'Poppins', system-ui, sans-serif;
   --fb: 'Open Sauce One', 'Inter', system-ui, sans-serif;
+  --fa: 'Tajawal', system-ui, -apple-system, sans-serif;
 
   /* ── 3. TYPE SCALE ─────────────────────────────────────────────
      Fluid via clamp(min, preferred, max).
@@ -434,5 +435,66 @@ body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .badge-upcoming::before { animation: none; }
   .word-sweep { animation: none; -webkit-text-fill-color: var(--gold); }
+}
+
+/* ── 20. BILINGUAL & RTL ARABIC STYLING ──────────────────────────── */
+html[lang="ar"] {
+  font-family: var(--fa);
+
+  body {
+    font-family: var(--fa);
+    letter-spacing: 0 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--fa);
+    letter-spacing: 0 !important;
+    line-height: 1.35;
+  }
+
+  p, span, a, button, input, textarea, select {
+    font-family: var(--fa);
+    letter-spacing: normal !important;
+  }
+
+  .btn, .pill-btn, .badge-upcoming {
+    font-family: var(--fa);
+    letter-spacing: 0 !important;
+  }
+
+  .eyebrow {
+    font-family: var(--fa);
+    letter-spacing: 0.02em !important;
+  }
+
+  /* In RTL, eyebrow line is to the right of text */
+  &[dir="rtl"] .eyebrow::before {
+    margin-left: 0;
+  }
+
+  /* Nav underline link in RTL */
+  &[dir="rtl"] .nav-underline-link::after {
+    left: auto;
+    right: 0;
+    transform-origin: right center;
+  }
+
+  /* Button hover transforms in RTL */
+  &[dir="rtl"] .btn {
+    &::before {
+      transform-origin: right center;
+    }
+    &:hover svg, &:hover .btn-icon {
+      transform: translateX(-4px);
+    }
+  }
+
+  /* Accent card border in RTL */
+  &[dir="rtl"] .accent-card {
+    border-left: none;
+    border-right: 3px solid var(--gold);
+    padding-left: 0;
+    padding-right: 20px;
+  }
 }
 

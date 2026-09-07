@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, NgZone } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, NgZone, ChangeDetectorRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
+import { LanguageService } from '../core/services/language.service';
 
 @Component({
   selector: 'app-hero',
@@ -24,8 +25,23 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   @ViewChild('heroScroll') heroScroll!: ElementRef<HTMLElement>;
 
   private ctx!: gsap.Context;
+  private currentSplit: SplitText | null = null;
+  private isInitialized = false;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    public lang: LanguageService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
+    effect(() => {
+      // Re-trigger text reveal smoothly when language changes
+      const current = this.lang.currentLang();
+      if (this.isInitialized) {
+        this.cdr.detectChanges();
+        this.animateTextOnLanguageChange();
+      }
+    });
+  }
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {
@@ -41,9 +57,10 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
       }
 
       // ── New 2026 Luxury Ethereal Blur-Up Reveal for Hero Title ─
-      const split = new SplitText(this.heroTitle.nativeElement.querySelectorAll('.hero-line'), {
+      this.currentSplit = new SplitText(this.heroTitle.nativeElement.querySelectorAll('.hero-line'), {
         type: 'words'
       });
+      const split = this.currentSplit;
 
       gsap.set(split.words, {
         y: 45,
@@ -151,11 +168,36 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
         });
       });
 
+      this.isInitialized = true;
     }, this.heroSection.nativeElement);
     });
   }
 
+  private animateTextOnLanguageChange() {
+    this.ngZone.runOutsideAngular(() => {
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (this.currentSplit) {
+        this.currentSplit.revert();
+        this.currentSplit = null;
+      }
+
+      const lines = this.heroTitle.nativeElement.querySelectorAll('.hero-line');
+      if (prefersReducedMotion) {
+        gsap.set(lines, { opacity: 1, y: 0, filter: 'none' });
+        return;
+      }
+
+      this.currentSplit = new SplitText(lines, { type: 'words' });
+      gsap.fromTo(this.currentSplit.words, 
+        { y: 24, opacity: 0, filter: 'blur(8px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.65, stagger: 0.035, ease: 'power3.out' }
+      );
+    });
+  }
+
   ngOnDestroy() {
+    this.currentSplit?.revert();
     this.ctx?.revert();
   }
 }
+
