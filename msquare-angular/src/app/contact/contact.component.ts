@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, OnDestroy, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
 
 import { LanguageService } from '../core/services/language.service';
@@ -68,13 +67,12 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
       if (prefersReducedMotion) return;
 
       this.ctx = gsap.context(() => {
-        // Font Effect: SplitText line reveal on Contact heading
+        // Heading reveal without DOM-mutilating SplitText
         if (this.ctHeading?.nativeElement) {
-          const splitCt = new SplitText(this.ctHeading.nativeElement, { type: 'lines', mask: 'lines' });
-          gsap.from(splitCt.lines, {
-            yPercent: 110,
-            duration: 0.9,
-            stagger: 0.1,
+          gsap.from(this.ctHeading.nativeElement, {
+            y: 30,
+            opacity: 0,
+            duration: 0.85,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: this.ctHeading.nativeElement,

@@ -439,32 +439,41 @@ body:not(.gsap-ready) [data-anim] { opacity: 1; transform: none; }
 
 /* ── 20. BILINGUAL & RTL ARABIC STYLING ──────────────────────────── */
 html[lang="ar"] {
-  font-family: var(--fa);
+  --fd: 'Tajawal', system-ui, -apple-system, sans-serif !important;
+  --fb: 'Tajawal', system-ui, -apple-system, sans-serif !important;
+  --fa: 'Tajawal', system-ui, -apple-system, sans-serif !important;
+  font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
 
   body {
-    font-family: var(--fa);
+    font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
     letter-spacing: 0 !important;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--fa);
+  h1, h2, h3, h4, h5, h6,
+  .hero-title, .hero-line, .partners-title, .events-title, .vm-heading,
+  .contact-title, .section-title, .wipe-header, .value-item h3, .logo-abbr {
+    font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
     letter-spacing: 0 !important;
     line-height: 1.35;
   }
 
-  p, span, a, button, input, textarea, select {
-    font-family: var(--fa);
-    letter-spacing: normal !important;
+  p, span, a, button, input, textarea, select, .logo-full-name {
+    font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
+    letter-spacing: 0 !important;
+  }
+
+  *, *::before, *::after {
+    letter-spacing: 0 !important;
   }
 
   .btn, .pill-btn, .badge-upcoming {
-    font-family: var(--fa);
+    font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
     letter-spacing: 0 !important;
   }
 
   .eyebrow {
-    font-family: var(--fa);
-    letter-spacing: 0.02em !important;
+    font-family: 'Tajawal', system-ui, -apple-system, sans-serif !important;
+    letter-spacing: 0 !important;
   }
 
   /* In RTL, eyebrow line is to the right of text */

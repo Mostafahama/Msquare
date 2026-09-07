@@ -2,7 +2,6 @@ import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetec
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
 
 import { LanguageService } from '../core/services/language.service';
 
@@ -99,13 +98,12 @@ export class IdentityComponent implements AfterViewInit, OnDestroy {
         const secEl = this.identitySec.nativeElement;
         const items = Array.from(secEl.querySelectorAll<HTMLElement>('.value-item'));
 
-        // ── Font Effect (a): SplitText line reveal on heading ─────
+        // Heading reveal without DOM-mutilating SplitText
         if (this.vmHeading?.nativeElement) {
-          const split = new SplitText(this.vmHeading.nativeElement, { type: 'lines', mask: 'lines' });
-          gsap.from(split.lines, {
-            yPercent: 110,
-            duration: 0.9,
-            stagger: 0.09,
+          gsap.from(this.vmHeading.nativeElement, {
+            y: 30,
+            opacity: 0,
+            duration: 0.85,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: this.vmHeading.nativeElement,

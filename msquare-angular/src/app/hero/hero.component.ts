@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, NgZone, ChangeDetectorRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 import { MagneticButtonDirective, DrawSvgButtonDirective } from '../shared/button-fx.directive';
 import { LanguageService } from '../core/services/language.service';
 
@@ -25,7 +24,6 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   @ViewChild('heroScroll') heroScroll!: ElementRef<HTMLElement>;
 
   private ctx!: gsap.Context;
-  private currentSplit: SplitText | null = null;
   private isInitialized = false;
 
   constructor(
@@ -57,16 +55,13 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
       }
 
       // ── New 2026 Luxury Ethereal Blur-Up Reveal for Hero Title ─
-      this.currentSplit = new SplitText(this.heroTitle.nativeElement.querySelectorAll('.hero-line'), {
-        type: 'words'
-      });
-      const split = this.currentSplit;
+      const lines = this.heroTitle.nativeElement.querySelectorAll('.hero-line');
 
-      gsap.set(split.words, {
+      gsap.set(lines, {
         y: 45,
         opacity: 0,
         filter: 'blur(16px)',
-        scale: 1.05,
+        scale: 1.04,
         transformOrigin: '50% 100%'
       });
 
@@ -90,14 +85,14 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
         ease: 'power2.out'
       }, 0);
 
-      // Words cinematic focus-in
-      heroTL.to(split.words, {
+      // Lines cinematic focus-in
+      heroTL.to(lines, {
         y: 0,
         opacity: 1,
         filter: 'blur(0px)',
         scale: 1,
         duration: 1.15,
-        stagger: 0.08,
+        stagger: 0.12,
         ease: 'power3.out'
       }, 0.15);
 
@@ -176,27 +171,22 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   private animateTextOnLanguageChange() {
     this.ngZone.runOutsideAngular(() => {
       const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (this.currentSplit) {
-        this.currentSplit.revert();
-        this.currentSplit = null;
-      }
+      const lines = this.heroTitle?.nativeElement?.querySelectorAll('.hero-line');
+      if (!lines || lines.length === 0) return;
 
-      const lines = this.heroTitle.nativeElement.querySelectorAll('.hero-line');
       if (prefersReducedMotion) {
         gsap.set(lines, { opacity: 1, y: 0, filter: 'none' });
         return;
       }
 
-      this.currentSplit = new SplitText(lines, { type: 'words' });
-      gsap.fromTo(this.currentSplit.words, 
-        { y: 24, opacity: 0, filter: 'blur(8px)' },
-        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.65, stagger: 0.035, ease: 'power3.out' }
+      gsap.fromTo(lines, 
+        { y: 18, opacity: 0, filter: 'blur(8px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.55, stagger: 0.08, ease: 'power3.out' }
       );
     });
   }
 
   ngOnDestroy() {
-    this.currentSplit?.revert();
     this.ctx?.revert();
   }
 }

@@ -2,7 +2,6 @@ import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetec
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
 
 import { LanguageService } from '../core/services/language.service';
 
@@ -91,13 +90,12 @@ export class PartnersComponent implements AfterViewInit, OnDestroy {
       this.ctx = gsap.context(() => {
         if (prefersReducedMotion) return;
 
-        // ── Font Effect (a): SplitText line reveal on Partners heading
+        // Heading reveal without DOM-mutilating SplitText
         if (this.ptTitle?.nativeElement) {
-          const splitPt = new SplitText(this.ptTitle.nativeElement, { type: 'lines', mask: 'lines' });
-          gsap.from(splitPt.lines, {
-            yPercent: 110,
-            duration: 0.9,
-            stagger: 0.1,
+          gsap.from(this.ptTitle.nativeElement, {
+            y: 30,
+            opacity: 0,
+            duration: 0.85,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: this.ptTitle.nativeElement,

@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 import { LanguageService } from '../core/services/language.service';
 
 export interface Event {
@@ -461,13 +460,12 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.ctx = gsap.context(() => {
         if (prefersReducedMotion) return;
 
-        // SplitText heading reveal
+        // Heading reveal without DOM-mutilating SplitText
         if (this.evTitle?.nativeElement) {
-          const split = new SplitText(this.evTitle.nativeElement, { type: 'lines', mask: 'lines' });
-          gsap.from(split.lines, {
-            yPercent: 110,
+          gsap.from(this.evTitle.nativeElement, {
+            y: 30,
+            opacity: 0,
             duration: 0.85,
-            stagger: 0.1,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: this.evTitle.nativeElement,
